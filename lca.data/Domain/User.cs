@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 #nullable disable
 
@@ -37,7 +38,7 @@ namespace LCA.Data.Domain
         public Guid? UsrGuid { get; set; }
         public int? UsrActive { get; set; }
         public int? UsrApproved { get; set; }
-        public string UsrComments { get; set; }
+        //public string UsrComments { get; set; }
 
         public virtual ICollection<Usrlink> Usrlinks { get; set; }
     }

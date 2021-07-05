@@ -14,9 +14,9 @@ namespace LCA.Services.Implementation
         {
             this._dbContext = dbContext;
         }
-        public IEnumerable<EPDHeading> GetAllEPDHeading(int page, int pageSize)
+        public IEnumerable<EPDHeadingModel> GetAllEPDHeading(int page, int pageSize)
         {
-            return this._dbContext.Epdheadings.Skip((page - 1) * pageSize).Take(pageSize).Select(p => new EPDHeading(p));
+            return this._dbContext.Epdheadings.Skip((page - 1) * pageSize).Take(pageSize).Select(p => new EPDHeadingModel(p));
         }
     }
 }

@@ -15824,10 +15824,10 @@ namespace LCA.Data.Context
                     .IsUnicode(false)
                     .HasColumnName("USR_CITY");
 
-                entity.Property(e => e.UsrComments)
-                    .HasMaxLength(500)
-                    .IsUnicode(false)
-                    .HasColumnName("USR_Comments");
+                //entity.Property(e => e.UsrComments)
+                //    .HasMaxLength(500)
+                //    .IsUnicode(false)
+                //    .HasColumnName("USR_Comments");
 
                 entity.Property(e => e.UsrCompid)
                     .HasColumnName("USR_COMPID")

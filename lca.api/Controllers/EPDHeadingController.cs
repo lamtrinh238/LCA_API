@@ -7,6 +7,7 @@ using System.Collections.Generic;
 
 namespace LCA.Api.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class EPDHeadingController : ControllerBase
@@ -19,7 +20,7 @@ namespace LCA.Api.Controllers
 
         // GET api/<EPDHeadingController>/5
         [HttpGet()]
-        public IEnumerable<EPDHeading> Get([FromQuery] int page, int pageSize)
+        public IEnumerable<EPDHeadingModel> Get([FromQuery] int page, int pageSize)
         {
             return this._epdHeadingService.GetAllEPDHeading(page, pageSize);
         }

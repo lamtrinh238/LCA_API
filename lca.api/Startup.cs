@@ -25,6 +25,7 @@ namespace LCA.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors();
             services.AddDbContext<LcaDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("AzureConnection")));
             services.AddControllers();
             //services.AddSwaggerGen(c =>
@@ -88,16 +89,19 @@ namespace LCA.Api
             //});
 
             // configure strongly typed settings object
-            services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
+            services.Configure<AppSettingsModel>(Configuration.GetSection("AppSettings"));
 
             // configure DI for application services
-            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IAuthsService, AuthsService>();
             services.AddScoped<IEPDHeadingService, EPDHeadingService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseHttpsRedirection();
+            app.UseRouting();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -105,16 +109,9 @@ namespace LCA.Api
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "lca.api v1"));
             }
 
-            app.UseHttpsRedirection();
-
-            app.UseRouting();
-
             app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            // custom jwt auth middleware
+            app.UseMiddleware<JwtMiddleware>();
 
             // global cors policy
             app.UseCors(x => x
@@ -122,8 +119,11 @@ namespace LCA.Api
                 .AllowAnyMethod()
                 .AllowAnyHeader());
 
-            // custom jwt auth middleware
-            app.UseMiddleware<JwtMiddleware>();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
         }
     }
 }

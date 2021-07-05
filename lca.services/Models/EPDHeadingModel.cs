@@ -3,7 +3,7 @@ using System;
 
 namespace LCA.Services.Models
 {
-    public class EPDHeading
+    public class EPDHeadingModel
     {
         public int Id { get; set; }
         public string Epdnumber { get; set; }
@@ -21,7 +21,7 @@ namespace LCA.Services.Models
         public int? Epdstatus { get; set; }
         public string Comments { get; set; }
 
-        public EPDHeading(Epdheading epdHeading)
+        public EPDHeadingModel(Epdheading epdHeading)
         {
             this.Id = epdHeading.Id;
             this.Epdnumber = epdHeading.Epdnumber;

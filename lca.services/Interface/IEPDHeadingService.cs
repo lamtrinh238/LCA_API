@@ -5,6 +5,6 @@ namespace LCA.Services.Interface
 {
     public interface IEPDHeadingService
     {
-        IEnumerable<EPDHeading> GetAllEPDHeading(int page, int pageSize);
+        IEnumerable<EPDHeadingModel> GetAllEPDHeading(int page, int pageSize);
     }
 }

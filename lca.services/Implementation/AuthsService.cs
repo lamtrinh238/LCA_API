@@ -1,3 +1,4 @@
+using LCA.Data.Context;
 using LCA.Services.Interface;
 using LCA.Services.Models;
 using Microsoft.Extensions.Options;
@@ -11,24 +12,25 @@ using System.Text;
 
 namespace LCA.Services.Implementation
 {
-    public class UserService : IUserService
+    public class AuthsService : IAuthsService
     {
-        // users hardcoded for simplicity, store in a db with hashed passwords in production applications
-        private List<User> _users = new List<User>
-        {
-            new User { Id = 1, FirstName = "Test", LastName = "User", Username = "test", Password = "test" }
-        };
+        
+        private readonly LcaDbContext _dbContext;
 
-        private readonly AppSettings _appSettings;
+        private readonly AppSettingsModel _appSettings;
 
-        public UserService(IOptions<AppSettings> appSettings)
+        public AuthsService(IOptions<AppSettingsModel> appSettings, LcaDbContext dbContext)
         {
             _appSettings = appSettings.Value;
+            _dbContext = dbContext;
         }
 
-        public AuthenticateResponse Authenticate(AuthenticateRequest model)
+        public AuthenticateResponseModel Authenticate(AuthenticateRequestModel model)
         {
-            var user = _users.SingleOrDefault(x => x.Username == model.Username && x.Password == model.Password);
+            var user = new UserModel(_dbContext.Users.SingleOrDefault(x => x.UsrLoginname == model.Username && x.UsrPassword == model.Password));
+
+            // HARD CODE ROLES
+            user.Roles = "Admin";
 
             // return null if user not found
             if (user == null) return null;
@@ -36,29 +38,23 @@ namespace LCA.Services.Implementation
             // authentication successful so generate jwt token
             var token = generateJwtToken(user);
 
-            return new AuthenticateResponse(user, token);
+            return new AuthenticateResponseModel(user, token);
         }
 
-        public IEnumerable<User> GetAll()
+        public IEnumerable<UserModel> GetAll()
         {
-            return _users;
-        }
-
-        public User GetById(int id)
-        {
-            return _users.FirstOrDefault(x => x.Id == id);
+            return _dbContext.Users.Take(10).Select(s => new UserModel(s));
         }
 
         // helper methods
-
-        private string generateJwtToken(User user)
+        private string generateJwtToken(UserModel user)
         {
             // generate token that is valid for 7 days
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[] { new Claim("id", user.Id.ToString()) }),
+                Subject = new ClaimsIdentity(new[] { new Claim("id", user.UsrId.ToString()), new Claim("roles", user.Roles.ToString()) }),
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };

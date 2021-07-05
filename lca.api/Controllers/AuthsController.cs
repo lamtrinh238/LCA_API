@@ -8,15 +8,15 @@ namespace LCA.Api.Controllers
     [Route("[controller]")]
     public class AuthsController : ControllerBase
     {
-        private IUserService _userService;
+        private IAuthsService _userService;
 
-        public AuthsController(IUserService userService)
+        public AuthsController(IAuthsService userService)
         {
             _userService = userService;
         }
 
         [HttpPost("authenticate")]
-        public IActionResult Authenticate(AuthenticateRequest model)
+        public IActionResult Authenticate(AuthenticateRequestModel model)
         {
             var response = _userService.Authenticate(model);
 

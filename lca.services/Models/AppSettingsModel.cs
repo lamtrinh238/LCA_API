@@ -1,6 +1,6 @@
 namespace LCA.Services.Models
 {
-    public class AppSettings
+    public class AppSettingsModel
     {
         public string Secret { get; set; }
     }
