@@ -1,5 +1,7 @@
 using LCA.Api.Helpers;
 using LCA.Data.Context;
+using LCA.Service.Implementation;
+using LCA.Service.Interface;
 using LCA.Services.Implementation;
 using LCA.Services.Interface;
 using LCA.Services.Models;
@@ -26,7 +28,7 @@ namespace LCA.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors();
-            services.AddDbContext<LcaDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("AzureConnection")));
+            services.AddDbContext<LcaDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("LcaDbContext")));
             services.AddControllers();
             //services.AddSwaggerGen(c =>
             //{
@@ -94,6 +96,7 @@ namespace LCA.Api
             // configure DI for application services
             services.AddScoped<IAuthsService, AuthsService>();
             services.AddScoped<IEPDHeadingService, EPDHeadingService>();
+            services.AddScoped<IUserService, UserService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
