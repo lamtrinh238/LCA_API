@@ -10,5 +10,6 @@ namespace LCA.Service.Interface
     public interface IUserService
     {
         UserModel GetUserByID(int userID);
+        UserCompanyModel GetUserWithCompaniesByID(int userID);
     }
 }

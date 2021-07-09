@@ -23,9 +23,9 @@ namespace LCA.API.Controllers
 
         // GET api/<UsersController>/5
         [HttpGet("{userID:int}")]
-        public UserModel Get(int userID)
+        public UserCompanyModel Get(int userID)
         {
-            return this._userService.GetUserByID(userID);
+            return this._userService.GetUserWithCompaniesByID(userID);
         }
     }
 }

@@ -1,4 +1,6 @@
+using LCA.Data.Domain;
 using System;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 namespace LCA.Services.Models
@@ -9,7 +11,7 @@ namespace LCA.Services.Models
         {
         }
 
-        public UserModel(LCA.Data.Domain.User user) 
+        public UserModel(User user) 
         {
             UsrId = user.UsrId;
             UsrLoginname = user.UsrLoginname;
@@ -68,5 +70,16 @@ namespace LCA.Services.Models
         public int? UsrActive { get; set; }
         public int? UsrApproved { get; set; }
         //public string UsrComments { get; set; }
+    }
+
+    public class UserCompanyModel: UserModel
+    {
+        public UserCompanyModel(User user, ICollection<Company> companies): base(user)
+        {
+            this.Companies = companies;
+        }
+
+        public ICollection<Company> Companies { get; set; }
+
     }
 }
