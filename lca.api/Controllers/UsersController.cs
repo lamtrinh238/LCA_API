@@ -1,4 +1,5 @@
 ﻿using LCA.Service.Interface;
+using LCA.Service.Models.filters;
 using LCA.Services.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -26,6 +27,12 @@ namespace LCA.API.Controllers
         public UserCompanyModel Get(int userID)
         {
             return this._userService.GetUserWithCompaniesByID(userID);
+        }
+        // GET api/<UsersController>/5
+        [HttpGet()]
+        public IEnumerable<UserModel> Get([FromQuery] UserFilter filter)
+        {
+            return this._userService.Filter(filter);
         }
     }
 }

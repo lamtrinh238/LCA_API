@@ -1,4 +1,5 @@
-﻿using LCA.Services.Models;
+﻿using LCA.Service.Models.filters;
+using LCA.Services.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +12,6 @@ namespace LCA.Service.Interface
     {
         UserModel GetUserByID(int userID);
         UserCompanyModel GetUserWithCompaniesByID(int userID);
+        public IEnumerable<UserModel> Filter(UserFilter filter);
     }
 }
