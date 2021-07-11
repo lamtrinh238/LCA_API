@@ -39,11 +39,22 @@ namespace LCA.API.Controllers
 
         // POST api/<UsersController>
         [HttpPost()]
-        public IActionResult Get([FromBody] UserModel user)
+        public IActionResult Create([FromBody] UserModel user)
         {
             var currentUser = this.HttpContext.Items["User"] as UserModel;
             user.UsrCreatedby = currentUser.UsrId;
             var userID = this._userWriteService.CreateUser(user);
+            return Ok(new
+            {
+                ID = userID
+            });
+        }
+
+        // PUT api/<UsersController>/5
+        [HttpPut("{userID:int}")]
+        public IActionResult Update(int userID, [FromBody] UserModel user)
+        {
+            this._userWriteService.UpdateUser(userID, user);
             return Ok(new
             {
                 ID = userID
