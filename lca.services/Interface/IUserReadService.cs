@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace LCA.Service.Interface
 {
-    public interface IUserService
+    public interface IUserReadService
     {
         UserModel GetUserByID(int userID);
         UserCompanyModel GetUserWithCompaniesByID(int userID);

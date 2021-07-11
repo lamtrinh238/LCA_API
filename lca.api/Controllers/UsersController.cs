@@ -15,24 +15,39 @@ namespace LCA.API.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly IUserService _userService;
+        private readonly IUserReadService _userReadService;
+        private readonly IUserWriteService _userWriteService;
 
-        public UsersController(IUserService userService)
+        public UsersController(IUserReadService userReadService, IUserWriteService userWriteService)
         {
-            this._userService = userService;
+            this._userReadService = userReadService;
+            this._userWriteService = userWriteService;
         }
 
         // GET api/<UsersController>/5
         [HttpGet("{userID:int}")]
         public UserCompanyModel Get(int userID)
         {
-            return this._userService.GetUserWithCompaniesByID(userID);
+            return this._userReadService.GetUserWithCompaniesByID(userID);
         }
         // GET api/<UsersController>/5
         [HttpGet()]
         public IEnumerable<UserModel> Get([FromQuery] UserFilter filter)
         {
-            return this._userService.Filter(filter);
+            return this._userReadService.Filter(filter);
+        }
+
+        // POST api/<UsersController>
+        [HttpPost()]
+        public IActionResult Get([FromBody] UserModel user)
+        {
+            var currentUser = this.HttpContext.Items["User"] as UserModel;
+            user.UsrCreatedby = currentUser.UsrId;
+            var userID = this._userWriteService.CreateUser(user);
+            return Ok(new
+            {
+                ID = userID
+            });
         }
     }
 }

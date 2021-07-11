@@ -12,12 +12,11 @@ using System.Threading.Tasks;
 
 namespace LCA.Service.Implementation
 {
-    public class UserService : IUserService
+    public class UserReadService : DbContextService, IUserReadService
     {
-        private readonly LcaDbContext _dbContext;
-        public UserService(LcaDbContext dbContext)
+
+        public UserReadService(LcaDbContext dbContext): base(dbContext)
         {
-            this._dbContext = dbContext;
         }
         public UserModel GetUserByID(int userID)
         {
