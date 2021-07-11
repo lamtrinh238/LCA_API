@@ -38,7 +38,7 @@ namespace LCA.Services.Models
             UsrGuid = user.UsrGuid;
             UsrActive = user.UsrActive;
             UsrApproved = user.UsrApproved;
-            //UsrComments = user.UsrComments;
+            UsrComments = user.UsrComments;
         }
         public string Roles { get; set; }
 
@@ -69,7 +69,7 @@ namespace LCA.Services.Models
         public Guid? UsrGuid { get; set; }
         public int? UsrActive { get; set; }
         public int? UsrApproved { get; set; }
-        //public string UsrComments { get; set; }
+        public string UsrComments { get; set; }
     }
 
     public class UserCompanyModel: UserModel

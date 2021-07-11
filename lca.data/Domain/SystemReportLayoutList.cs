@@ -8,15 +8,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LCA.Data.Domain
 {
-    public partial class ProgramModule
+    [Table("SystemReportLayoutList")]
+    public partial class SystemReportLayoutList
     {
         [Key]
         [Column("ID")]
         public int Id { get; set; }
+        [StringLength(20)]
+        public string LayoutName { get; set; }
+        [StringLength(150)]
+        public string Description { get; set; }
+        public int? System { get; set; }
         [StringLength(50)]
-        public string Name { get; set; }
-        [StringLength(100)]
-        public string ProgramFile { get; set; }
-        public int? Status { get; set; }
+        public string LayoutFile { get; set; }
     }
 }
