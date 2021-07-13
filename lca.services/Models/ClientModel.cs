@@ -1,5 +1,6 @@
 ﻿using LCA.Data.Domain;
 using System;
+using System.Linq;
 
 namespace LCA.Services.Models
 {
@@ -9,7 +10,7 @@ namespace LCA.Services.Models
         {
         }
 
-        public ClientModel(Company company)
+        public ClientModel(Company company, Country coutry)
         {
             ComId = company.ComId;
             ComType = company.ComType;
@@ -47,6 +48,7 @@ namespace LCA.Services.Models
             ComModulSubFase = company.ComModulSubFase;
             ComModulSharing = company.ComModulSharing;
             ComProgramOperator = company.ComProgramOperator;
+            CountryName = coutry.CountryName;
         }
 
         public long ComId { get; set; }
@@ -85,5 +87,6 @@ namespace LCA.Services.Models
         public int? ComModulSubFase { get; set; }
         public int? ComModulSharing { get; set; }
         public long? ComProgramOperator { get; set; }
+        public string CountryName { get; }
     }
 }

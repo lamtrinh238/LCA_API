@@ -218,7 +218,15 @@ namespace LCA.Services.Implementation
                 }
             }
 
-            return query.Skip(filter.SkipSize).Take(filter.PageSize).Select(client => new ClientModel(client)).AsNoTracking().AsEnumerable();
+            return query.Skip(filter.SkipSize).Take(filter.PageSize)
+                .Join(this._dbContext.Countries,
+                comp => comp.ComCountry,
+                link => link.Int,
+                (comp, link) => new
+                {
+                    Company = comp,
+                    Contry = link,
+                }).Select(c => new ClientModel(c.Company, c.Contry)).AsNoTracking().AsEnumerable();
         }
     }
 }
