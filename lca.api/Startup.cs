@@ -96,7 +96,8 @@ namespace LCA.Api
             // configure DI for application services
             services.AddScoped<IAuthsService, AuthsService>();
             services.AddScoped<IEPDHeadingService, EPDHeadingService>();
-            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IUserReadService, UserReadService>();
+            services.AddScoped<IUserWriteService, UserWriteService>();
             services.AddScoped<IClientService, ClientService>();
         }
 
