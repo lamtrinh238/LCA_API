@@ -24,5 +24,32 @@ namespace LCA.Service.Models.filters
                 return (this.Page - 1) * this.PageSize;
             }
         }
+
+
+        public string SearchText { get; set; }
+
+        public List<SearchItem> SearchItems { get; set; }
+    }
+
+    public class SearchItem
+    {
+        public string Key { get; set; }
+
+        public object Value { get; set; }
+
+        public Operator Operator { get; set; }
+    }
+
+    public enum Operator
+    {
+        Equal,
+        NotEqual,
+        GreaterThan,
+        LessThan,
+        GreaterThanOrEqual,
+        LessThanOrEqual,
+        Between,
+        Like,
+        In
     }
 }
