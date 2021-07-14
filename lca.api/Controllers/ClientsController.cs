@@ -22,7 +22,12 @@ namespace LCA.API.Controllers
         [HttpGet()]
         public IEnumerable<ClientModel> Get([FromQuery] ClientFilter filter)
         {
-            return this._clientService.Filter(filter);
+            BaseFilter testFilter = new BaseFilter();
+            testFilter.SearchItems = new List<SearchItem>();
+            testFilter.SearchItems.Add(new SearchItem() {FieldName = "Email", Operator = Operator.Like, Value = "tam" });
+            testFilter.SortItems = new SortItem() { FieldName = "Name", SortType = SortType.DESC };
+
+            return this._clientService.Filter(testFilter);
         }
     }
 }

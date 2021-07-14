@@ -25,19 +25,29 @@ namespace LCA.Service.Models.filters
             }
         }
 
-
         public string SearchText { get; set; }
 
+        [JsonIgnore]
         public List<SearchItem> SearchItems { get; set; }
+
+        [JsonIgnore]
+        public SortItem SortItems { get; set; }
     }
 
     public class SearchItem
     {
-        public string Key { get; set; }
+        public string FieldName { get; set; }
 
         public object Value { get; set; }
 
         public Operator Operator { get; set; }
+    }
+
+    public class SortItem
+    {
+        public string FieldName { get; set; }
+
+        public SortType SortType { get; set; }
     }
 
     public enum Operator
@@ -51,5 +61,11 @@ namespace LCA.Service.Models.filters
         Between,
         Like,
         In
+    }
+
+    public enum SortType
+    {
+        ASC = 0,
+        DESC
     }
 }

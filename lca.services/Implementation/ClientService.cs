@@ -1,4 +1,5 @@
 ﻿using LCA.Data.Context;
+using LCA.Service.Helpers;
 using LCA.Service.Interface;
 using LCA.Service.Models.filters;
 using LCA.Services.Models;
@@ -30,6 +31,7 @@ namespace LCA.Services.Implementation
 
         public IEnumerable<ClientModel> Filter(ClientFilter filter)
         {
+
             var a = _dbContext.Companies
                 .Join(_dbContext.Countries,
                 comp => comp.ComCountry,
@@ -40,6 +42,8 @@ namespace LCA.Services.Implementation
                     Contry = link,
                 });
             var b = a.ToQueryString();
+
+            //var test 
 
             var result = _dbContext.RawSqlQuery(
                 "SELECT TOP (10) u.*, ul.*  FROM [dbo].[USERS] as u inner join USRLinks as ul on u.USR_ID = ul.USR_ID  where u.USR_LOGINNAME like '%ta%' and ul.COM_ID = '11'  order by ul.USR_TYPE",
@@ -258,5 +262,27 @@ namespace LCA.Services.Implementation
                     Contry = link,
                 }).Select(c => new ClientModel(c.Company, c.Contry)).AsNoTracking().AsEnumerable();
         }
+
+        public IEnumerable<ClientModel> Filter(BaseFilter testFilter)
+        {
+               
+            
+            var quey = from u in _dbContext.Users
+                       join ul in _dbContext.Usrlinks on u.UsrId equals ul.UsrId
+                       select new UserModel(u);
+
+            quey.ApplyFilter(testFilter, _dbContext);
+
+
+            //var test 
+
+            var result = _dbContext.RawSqlQuery(
+                "SELECT TOP (10) u.*, ul.*  FROM [dbo].[USERS] as u inner join USRLinks as ul on u.USR_ID = ul.USR_ID  where u.USR_LOGINNAME like '%ta%' and ul.COM_ID = '11'  order by ul.USR_TYPE",
+                x => new TopUser { Name = (string)x[0].ToString(), Count = (string)x[1] });
+
+
+            return null;
+        }
+
     }
 }

@@ -18,6 +18,9 @@ namespace LCA.Data.Context
         {
         }
 
+        #region DbSet declare
+
+        public virtual DbSet<object> Dynamic { get; set; }
         public virtual DbSet<AspstateTempApplication> AspstateTempApplications { get; set; }
         public virtual DbSet<AspstateTempSession> AspstateTempSessions { get; set; }
         public virtual DbSet<Calheading> Calheadings { get; set; }
@@ -198,6 +201,7 @@ namespace LCA.Data.Context
         public virtual DbSet<WcmainGroup> WcmainGroups { get; set; }
         public virtual DbSet<Wcparameter> Wcparameters { get; set; }
         public virtual DbSet<Xmlunit> Xmlunits { get; set; }
+        #endregion
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
