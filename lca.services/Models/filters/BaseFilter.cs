@@ -25,8 +25,6 @@ namespace LCA.Service.Models.filters
             }
         }
 
-        public string SearchText { get; set; }
-
         [JsonIgnore]
         public List<SearchItem> SearchItems { get; set; }
 

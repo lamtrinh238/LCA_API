@@ -19,8 +19,6 @@ namespace LCA.Data.Context
         }
 
         #region DbSet declare
-
-        public virtual DbSet<object> Dynamic { get; set; }
         public virtual DbSet<AspstateTempApplication> AspstateTempApplications { get; set; }
         public virtual DbSet<AspstateTempSession> AspstateTempSessions { get; set; }
         public virtual DbSet<Calheading> Calheadings { get; set; }
