@@ -16,7 +16,7 @@ namespace LCA.Services.Implementation
             this._dbContext = dbContext;
         }
 
-        public IEnumerable<ClientModel> Filter(ClientFilter filter)
+        public ClientResultModel Filter(ClientFilter filter)
         {
             var query = this._dbContext.Companies.Select(client => client);
 
@@ -218,7 +218,9 @@ namespace LCA.Services.Implementation
                 }
             }
 
-            return query.Skip(filter.SkipSize).Take(filter.PageSize)
+            var count = query.Count();
+
+            var clients = query.Skip(filter.SkipSize).Take(filter.PageSize)
                 .Join(this._dbContext.Countries,
                 comp => comp.ComCountry,
                 link => link.Int,
@@ -227,6 +229,8 @@ namespace LCA.Services.Implementation
                     Company = comp,
                     Contry = link,
                 }).Select(c => new ClientModel(c.Company, c.Contry)).AsNoTracking().AsEnumerable();
+
+            return new ClientResultModel(clients, count);
         }
     }
 }

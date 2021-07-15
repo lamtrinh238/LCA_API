@@ -6,6 +6,6 @@ namespace LCA.Service.Interface
 {
     public interface IClientService
     {
-        public IEnumerable<ClientModel> Filter(ClientFilter filter);
+        public ClientResultModel Filter(ClientFilter filter);
     }
 }

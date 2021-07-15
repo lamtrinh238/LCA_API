@@ -1,5 +1,6 @@
 ﻿using LCA.Data.Domain;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace LCA.Services.Models
@@ -88,5 +89,21 @@ namespace LCA.Services.Models
         public int? ComModulSharing { get; set; }
         public long? ComProgramOperator { get; set; }
         public string CountryName { get; }
+    }
+
+    public class ClientResultModel
+    {
+        public ClientResultModel()
+        {
+        }
+
+        public ClientResultModel(IEnumerable<ClientModel> clientModel, int count)
+        {
+            this.Clients = clientModel;
+            this.Count = count;
+        }
+
+        public IEnumerable<ClientModel> Clients { get; set; }
+        public int Count { get; set; }
     }
 }

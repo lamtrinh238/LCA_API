@@ -20,7 +20,7 @@ namespace LCA.API.Controllers
 
         // GET api/<ClientsController>/5
         [HttpGet()]
-        public IEnumerable<ClientModel> Get([FromQuery] ClientFilter filter)
+        public ClientResultModel Get([FromQuery] ClientFilter filter)
         {
             return this._clientService.Filter(filter);
         }
