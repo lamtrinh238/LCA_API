@@ -9,10 +9,16 @@ namespace LCA.Service.Models.filters
         {
             this.PageSize = 20;
             this.Page = 1;
+            FilterItems = new List<FilterItem>();
+            SortItems = new SortItem();
         }
 
         public int Page { get; set; }
         public int PageSize { get; set; }
+
+        public string SortText { get; set; }
+
+        public string FilterText { get; set; }
 
         [JsonIgnore]
         internal int SkipSize { get
@@ -22,13 +28,13 @@ namespace LCA.Service.Models.filters
         }
 
         [JsonIgnore]
-        public List<SearchItem> SearchItems { get; set; }
+        internal List<FilterItem> FilterItems { get; set; }
 
         [JsonIgnore]
-        public SortItem SortItems { get; set; }
+        internal SortItem SortItems { get; set; }
     }
 
-    public class SearchItem
+    public class FilterItem
     {
         public string FieldName { get; set; }
 

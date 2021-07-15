@@ -22,11 +22,6 @@ namespace LCA.API.Controllers
         [HttpGet()]
         public IEnumerable<ClientModel> Get([FromQuery] BaseFilter filter)
         {
-            //BaseFilter testFilter = new BaseFilter();
-            //testFilter.SearchItems = new List<SearchItem>();
-            //testFilter.SearchItems.Add(new SearchItem() {FieldName = "ComCompanyname", Operator = Operator.Like, Value = "LCA" });
-            //testFilter.SortItems = new SortItem() { FieldName = "ComId", SortType = SortType.DESC };
-
             return _clientService.Filter(filter);
         }
     }
