@@ -13,7 +13,7 @@ namespace LCA.Data.Context
 {
     public partial class LcaDbContext : DbContext
     {
-        public List<DataRow> RawSqlQuery(string query, CommandType commandType = CommandType.Text)
+        public DataTable RawSqlQuery(string query, CommandType commandType = CommandType.Text)
         {
             using (var command = Database.GetDbConnection().CreateCommand())
             {
@@ -26,16 +26,8 @@ namespace LCA.Data.Context
                 {
                     var dt = new DataTable();
                     dt.Load(result);
-
-                    //Populate a list
                     var results = dt.AsEnumerable().ToList();
-
-                    //while (result.Read())
-                    //{
-                    //    entities.Add(map(result));
-                    //}
-
-                    return results;
+                    return dt;
                 }
             }
         }

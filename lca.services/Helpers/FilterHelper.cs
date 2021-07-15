@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Data;
 using System.Linq;
 using System.Reflection;
 
@@ -11,35 +12,107 @@ namespace LCA.Service.Helpers
 {
     public static class FilterHelper
     {
+		public static List<T> ConvertDataTable<T>(this DataTable dt)
+		{
+			List<T> data = new List<T>();
+			foreach (DataRow row in dt.Rows)
+			{
+				T item = GetItem<T>(row);
+				data.Add(item);
+			}
+			return data;
+		}
+		private static T GetItem<T>(DataRow dr)
+		{
+			Type temp = typeof(T);
+			T obj = Activator.CreateInstance<T>();
+
+			foreach (DataColumn column in dr.Table.Columns)
+			{
+				foreach (PropertyInfo pro in temp.GetProperties())
+				{
+					if (pro.Name == column.ColumnName)
+                    {
+						//if (column.DataType == typeof(string))
+						//{
+						//	pro.SetValue(obj, dr.IsNull(column.ColumnName) ? "" : dr[column.ColumnName], null);
+						//}
+      //                  else 
+						//{
+							
+						//}
+						var colVal = dr.IsNull(column.ColumnName) ? null : dr[column.ColumnName];
+						pro.SetValue(obj, colVal, null);
+					}
+					else
+						continue;
+				}
+			}
+			return obj;
+		}
 		public static string ApplyFilterToQueryString<T>(this IQueryable<T> source, BaseFilter filter)
 		{
 			filter = filter.CorrectFilter(source);
-			string sqlString = source.ToQueryString();
-			//string sqlString = "SELECT [c].[COM_ID], [c].[COM_ADD], [c].[COM_BannerLogo], [c].[COM_CITY], [c].[COM_COMPANYNAME], [c].[COM_COMPANYVAT], [c].[COM_Country], [c].[COM_CREATEDBY], [c].[COM_CREATEDTTM], [c].[COM_Dir], [c].[COM_EMAIL], [c].[COM_EPDInfo1], [c].[COM_EPDInfo2], [c].[COM_EPDInfo3], [c].[COM_EPDInfo4], [c].[COM_EPDPicture1], [c].[COM_EPDPicture2], [c].[COM_GUID], [c].[COM_Logo], [c].[COM_MainContact], [c].[COM_ManagmentSys], [c].[COM_Modul_Sharing], [c].[COM_Modul_SubFase], [c].[COM_PageText], [c].[COM_PaidTO], [c].[COM_PHONE1], [c].[COM_PHONE2], [c].[COM_ProgramOperator], [c].[COM_PROID], [c].[COM_Startup], [c].[COM_STATUS], [c].[COM_System], [c].[COM_Token], [c].[COM_TYPE], [c].[COM_WEB], [c].[COM_ZIP], [c0].[int], [c0].[Alpha2Code], [c0].[Alpha3Code], [c0].[CountryName], [c0].[Language], [c0].[NumericCode]\r\nFROM [COMPANY] AS [c]\r\nINNER JOIN [COUNTRY] AS [c0] ON [c].[COM_Country] = [c0].[int]";
+			Type typeOfModel = source.GetType().GenericTypeArguments[0];
+			string tableNameAlias = typeOfModel.Name;
+			filter = filter.CorrectFilter(source);
+			string sqlSelect = $"SELECT [{tableNameAlias}].* FROM ( { source.ToQueryString() } ) AS [{tableNameAlias}]";
+			string sqlWhere = filter.GeneratedWhere(tableNameAlias);
+			string sqlSort = filter.GenerateOrderBy(tableNameAlias);
+			string sqlPaging = $"OFFSET ({filter.SkipSize}) ROWS FETCH NEXT ({filter.PageSize}) ROWS ONLY";
 
-
-			int slPosition = sqlString.IndexOf("SELECT", StringComparison.OrdinalIgnoreCase);
-			int fromPosition = sqlString.IndexOf("FROM", StringComparison.OrdinalIgnoreCase);
-			List<int> joinPosition = new List<int>();
-			int count = 0, minIndex = sqlString.IndexOf("JOIN", 0);
-			while (minIndex != -1)
-			{
-				minIndex = sqlString.IndexOf("JOIN", minIndex + "JOIN".Length);
-				joinPosition.Add(minIndex);
-				count++;
-			}
-			string selectStr = sqlString.Substring(0, slPosition);
-			string fromStr = sqlString.Substring(fromPosition, sqlString.IndexOf("JOIN", 0));
-
-
-			List<TableInfo> tablesInfo = GetTablesInfo(typeof(LcaDbContext).Assembly, "LCA.Data.Domain");
-
-			return string.Empty;
-			//BaseFilter filterValid = ValidateFilter(source, filter);
-			//return (IQueryable<T>)ApplyFilter((IQueryable)source, filter);
+			return sqlSelect + Environment.NewLine + sqlWhere + Environment.NewLine + sqlSort + Environment.NewLine + sqlPaging;
 		}
 
-		public static BaseFilter CorrectFilter(this BaseFilter filter, IQueryable source)
+		private static string GeneratedWhere(this BaseFilter filter, string tableNameAlias) 
+		{
+			string whereStr = "WHERE 1 = 1";
+			foreach (SearchItem item in filter.SearchItems)
+			{
+				string strOperator = string.Empty;
+				switch (item.Operator)
+				{
+					case Operator.Equal:
+						whereStr += $" AND [{tableNameAlias}].[{item.FieldName}] == '{item.Value}'";
+						break;
+					case Operator.NotEqual:
+						whereStr += $" AND [{tableNameAlias}].[{item.FieldName}] != '{item.Value}'";
+						break;
+					case Operator.GreaterThan:
+						whereStr += $" AND [{tableNameAlias}].[{item.FieldName}] > {item.Value}";
+						break;
+					case Operator.LessThan:
+						whereStr += $" AND [{tableNameAlias}].[{item.FieldName}] < {item.Value}";
+						break;
+					case Operator.GreaterThanOrEqual:
+						whereStr += $" AND [{tableNameAlias}].[{item.FieldName}] >= {item.Value}";
+						break;
+					case Operator.LessThanOrEqual:
+						whereStr += $" AND [{tableNameAlias}].[{item.FieldName}] <= {item.Value}";
+						break;
+					case Operator.Between:
+						break;
+					case Operator.Like:
+						whereStr += $" AND [{tableNameAlias}].[{item.FieldName}] LIKE '%{item.Value}%'";
+						break;
+					case Operator.In:
+						break;
+					default:
+						break;
+				}
+
+			}
+			return whereStr;
+		}
+
+		private static string GenerateOrderBy(this BaseFilter filter, string tableNameAlias)
+		{
+			string sortName = filter.SortItems.FieldName;
+			string sortOrder = filter.SortItems.SortType.ToString();
+			return $"ORDER BY [{tableNameAlias}].[{sortName}] {sortOrder}";
+		}
+
+		private static BaseFilter CorrectFilter(this BaseFilter filter, IQueryable source)
 		{
 			Type typeOfModel = source.GetType().GenericTypeArguments[0];
 			PropertyInfo[] props = typeOfModel.GetProperties();
@@ -99,7 +172,6 @@ namespace LCA.Service.Helpers
 			return result;
 		}
 	}
-
 	public class TableInfo 
 	{
 		public string TableName { get; set; }

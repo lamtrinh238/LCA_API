@@ -87,6 +87,6 @@ namespace LCA.Services.Models
         public int? ComModulSubFase { get; set; }
         public int? ComModulSharing { get; set; }
         public long? ComProgramOperator { get; set; }
-        public string CountryName { get; }
+        public string CountryName { get; set; }
     }
 }

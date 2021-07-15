@@ -248,28 +248,50 @@ namespace LCA.Services.Implementation
 
         public IEnumerable<ClientModel> Filter(BaseFilter testFilter)
         {
-               
-            
-            var quey = from com in _dbContext.Companies
+            var query = from com in _dbContext.Companies
                        join ctr in _dbContext.Countries on com.ComCountry equals ctr.Int
-                       select new ClientModel();
-
-            testFilter = testFilter.CorrectFilter(quey);
-
-            var a = quey.ApplyFilterToQueryString(testFilter);
-
-            var data = _dbContext.RawSqlQuery("");
-
-
-
-            //var test 
-
-            //var result = _dbContext.RawSqlQuery(
-            //    "SELECT TOP (10) u.*, ul.*  FROM [dbo].[USERS] as u inner join USRLinks as ul on u.USR_ID = ul.USR_ID  where u.USR_LOGINNAME like '%ta%' and ul.COM_ID = '11'  order by ul.USR_TYPE",
-            //    x => new TopUser { Name = (string)x[0].ToString(), Count = (string)x[1] });
-
-
-            return null;
+                       select new ClientModel() {
+                            ComId = com.ComId,
+                            ComType = com.ComType,
+                            ComCompanyvat = com.ComCompanyvat,
+                            ComCompanyname = com.ComCompanyname,
+                            ComEmail = com.ComEmail,
+                            ComAdd = com.ComAdd,
+                            ComProid = com.ComProid,
+                            ComZip = com.ComZip,
+                            ComCity = com.ComCity,
+                            ComPhone1 = com.ComPhone1,
+                            ComStatus = com.ComStatus,
+                            ComCreatedttm = com.ComCreatedttm,
+                            ComCreatedby = com.ComCreatedby,
+                            ComEpdinfo1 = com.ComEpdinfo1,
+                            ComEpdinfo2 = com.ComEpdinfo2,
+                            ComEpdinfo3 = com.ComEpdinfo3,
+                            ComEpdinfo4 = com.ComEpdinfo4,
+                            ComEpdpicture1 = com.ComEpdpicture1,
+                            ComEpdpicture2 = com.ComEpdpicture2,
+                            ComLogo = com.ComLogo,
+                            ComDir = com.ComDir,
+                            ComPageText = com.ComPageText,
+                            ComBannerLogo = com.ComBannerLogo,
+                            ComMainContact = com.ComMainContact,
+                            ComManagmentSys = com.ComManagmentSys,
+                            ComWeb = com.ComWeb,
+                            ComPhone2 = com.ComPhone2,
+                            ComSystem = com.ComSystem,
+                            ComStartup = com.ComStartup,
+                            ComPaidTo = com.ComPaidTo,
+                            ComGuid = com.ComGuid,
+                            ComCountry = com.ComCountry,
+                            ComToken = com.ComToken,
+                            ComModulSubFase = com.ComModulSubFase,
+                            ComModulSharing = com.ComModulSharing,
+                            ComProgramOperator = com.ComProgramOperator,
+                            CountryName = ctr.CountryName
+                    };
+            string sqlStr = query.ApplyFilterToQueryString(testFilter);
+            List<ClientModel> clients = _dbContext.RawSqlQuery(sqlStr).ConvertDataTable<ClientModel>();
+            return clients;
         }
 
     }

@@ -20,14 +20,14 @@ namespace LCA.API.Controllers
 
         // GET api/<ClientsController>/5
         [HttpGet()]
-        public IEnumerable<ClientModel> Get([FromQuery] ClientFilter filter)
+        public IEnumerable<ClientModel> Get([FromQuery] BaseFilter filter)
         {
-            BaseFilter testFilter = new BaseFilter();
-            testFilter.SearchItems = new List<SearchItem>();
-            testFilter.SearchItems.Add(new SearchItem() {FieldName = "Email", Operator = Operator.Like, Value = "tam" });
-            testFilter.SortItems = new SortItem() { FieldName = "Name", SortType = SortType.DESC };
+            //BaseFilter testFilter = new BaseFilter();
+            //testFilter.SearchItems = new List<SearchItem>();
+            //testFilter.SearchItems.Add(new SearchItem() {FieldName = "ComCompanyname", Operator = Operator.Like, Value = "LCA" });
+            //testFilter.SortItems = new SortItem() { FieldName = "ComId", SortType = SortType.DESC };
 
-            return this._clientService.Filter(testFilter);
+            return _clientService.Filter(filter);
         }
     }
 }
