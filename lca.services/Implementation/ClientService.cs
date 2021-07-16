@@ -19,16 +19,6 @@ namespace LCA.Services.Implementation
         {
             this._dbContext = dbContext;
         }
-
-        
-
-        public class TopUser
-        {
-            public string Name { get; set; }
-
-            public string Count { get; set; }
-        }
-
         public IEnumerable<ClientModel> Filter(ClientFilter filter)
         {
 

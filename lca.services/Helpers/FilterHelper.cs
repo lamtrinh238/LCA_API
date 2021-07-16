@@ -43,10 +43,10 @@ namespace LCA.Service.Helpers
 		}
 		public static string ApplyFilterToQueryString<T>(this IQueryable<T> source, BaseFilter filter)
 		{
-			filter = filter.CorrectFilter(source);
+			QueryInfo queryInfo = ParsingQuery(source);
+			filter = filter.CorrectFilter(source, queryInfo);
 			Type typeOfModel = source.GetType().GenericTypeArguments[0];
 			string sourceQuery = source.ToQueryString();
-
 			string tableNameAlias = typeOfModel.Name;
 			string sqlSelect = $"SELECT [{tableNameAlias}].* FROM ( { sourceQuery } ) AS [{tableNameAlias}]";
 			string sqlWhere = filter.GeneratedWhere(tableNameAlias);
@@ -56,20 +56,59 @@ namespace LCA.Service.Helpers
 			return sqlSelect + Environment.NewLine + sqlWhere + Environment.NewLine + sqlSort + Environment.NewLine + sqlPaging;
 		}
 
-		private static string GeneratedWhere(this BaseFilter filter, string tableNameAlias) 
+        private static QueryInfo ParsingQuery<T>(IQueryable<T> source)
+        {
+			QueryInfo queryInfo = new QueryInfo();
+			List<TableInfo> allTablesInfo = GetTablesInfo(typeof(LcaDbContext).Assembly, "LCA.Data.Domain");
+			const string select = "SELECT";
+			const string from = "FROM";
+			string sourceQuery = source.ToQueryString();
+			int indexSelect = sourceQuery.IndexOf(select, StringComparison.OrdinalIgnoreCase);
+			int indexFrom = sourceQuery.IndexOf(from, StringComparison.OrdinalIgnoreCase);
+			string sqlSelect = sourceQuery.Substring(select.Length, indexFrom - select.Length).Trim();
+			string sqlFrom = sourceQuery.Substring(indexFrom + from.Length).Trim();
+
+			// get select fields
+			string[] selectSplit = sqlSelect.Split(",");
+            for (int i = 0; i < selectSplit.Length; i++)
+            {
+				string[] field = selectSplit[i].Trim().Split("AS");
+				string fieldName = field[0].Trim();
+				string fieldAlias = field.Length == 1 ? fieldName : field[1].Trim();
+				queryInfo.SelectFields.Add(fieldAlias, fieldName);
+			}
+
+			// get tables from
+			string[] fromSplit = sqlFrom.Split(" ");
+			for (int i = 0; i < fromSplit.Length; i++)
+            {
+                if (fromSplit[i].Equals("AS", StringComparison.OrdinalIgnoreCase))
+                {
+					string tableName = GetNameInBracket(fromSplit[i - 1]);
+					string tableAlias = GetNameInBracket(fromSplit[i + 1]);
+					TableInfo tableInfo = allTablesInfo.Where(c => GetNameInBracket(c.TableName).Equals(tableName)).FirstOrDefault();
+					queryInfo.TablesJoin.Add($"[{tableAlias}]", tableInfo);
+				}
+			}
+
+
+			return queryInfo;
+        }
+
+        private static string GeneratedWhere(this BaseFilter filter, string tableNameAlias) 
 		{
             if (filter.FilterItems == null || !filter.FilterItems.Any())
             {
 				return string.Empty;
             }
 
-			string whereStr = "WHERE";
+			string whereStr = "WHERE 1 = 1";
 			foreach (FilterItem item in filter.FilterItems)
 			{
 				switch (item.Operator)
 				{
 					case Operator.Equal:
-						whereStr += $" AND [{tableNameAlias}].[{item.FieldName}] == '{item.Value}'";
+						whereStr += $" AND [{tableNameAlias}].[{item.FieldName}] = '{item.Value}'";
 						break;
 					case Operator.NotEqual:
 						whereStr += $" AND [{tableNameAlias}].[{item.FieldName}] != '{item.Value}'";
@@ -112,7 +151,7 @@ namespace LCA.Service.Helpers
 			return $"ORDER BY [{tableNameAlias}].[{sortName}] {sortOrder}";
 		}
 
-		private static BaseFilter CorrectFilter(this BaseFilter filter, IQueryable source)
+		private static BaseFilter CorrectFilter(this BaseFilter filter, IQueryable source, QueryInfo queryInfo)
 		{
 			filter.FilterText = HttpUtility.UrlDecode(filter.FilterText);
 			Type typeOfModel = source.GetType().GenericTypeArguments[0];
@@ -130,7 +169,7 @@ namespace LCA.Service.Helpers
 						continue;
 
 					
-					if (!Enum.TryParse(item.Substring(index1 + 1, index2 - index1 - 1), true, out Operator oprEnum))
+					if (!Enum.TryParse(GetNameInBracket(item), true, out Operator oprEnum))
 						continue;
 					string filterKey = item.Substring(0, index1);
 					string filterVal = item.Substring(index2 +1);
@@ -142,7 +181,7 @@ namespace LCA.Service.Helpers
 			}
 
 			// set order by default is first column. because order is required for paging
-			filter.SortItems = new SortItem() { FieldName = props.FirstOrDefault().Name, SortType = SortType.ASC };
+			filter.SortItems = new SortItem() { FieldName = GetNameInBracket(queryInfo.SelectFields.FirstOrDefault().Key), SortType = SortType.ASC };
 
 			// parsing sort
 			if (!string.IsNullOrEmpty(filter.SortText))
@@ -184,9 +223,9 @@ namespace LCA.Service.Helpers
 						if (colAttr != null)
 						{
 							string propName = prop.Name;
-							string auth = colAttr.Name;
+							string colName = colAttr.Name;
 
-							iTableInfo.ColumnName.Add(propName, auth);
+							iTableInfo.ColumnName.Add(propName, colName);
 						}
 					}
 				}
@@ -194,11 +233,44 @@ namespace LCA.Service.Helpers
 			}
 			return result;
 		}
+
+		private static string GetNameInBracket(string str) 
+		{
+			int index1 = str.IndexOf('[');
+			int index2 = str.IndexOf(']');
+			if (index1 < 0 
+				|| index2 < 0 
+				|| (index1+2) > index2)
+				return str;
+
+			return str.Substring(index1 + 1, index2 - index1 - 1);
+		}
 	}
+
 	public class TableInfo 
 	{
 		public string TableName { get; set; }
 
+		// property name, column name
 		public Dictionary<string, string> ColumnName { get; set; }
+	}
+
+	public class QueryInfo
+	{
+		public QueryInfo() 
+		{
+			TablesJoin = new Dictionary<string, TableInfo>();
+			SelectFields = new Dictionary<string, string>();
+		}
+
+		/// <summary>
+		/// table name alias, TableInfo
+		/// </summary>
+		public Dictionary<string, TableInfo> TablesJoin { get; set; }
+
+		/// <summary>
+		/// name alias, source
+		/// </summary>
+		public Dictionary<string, string> SelectFields { get; set; }
 	}
 }
