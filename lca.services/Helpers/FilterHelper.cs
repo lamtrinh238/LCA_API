@@ -66,7 +66,7 @@ namespace LCA.Service.Helpers
 
 		private static string GeneratedWhere(this BaseFilter filter, string tableNameAlias) 
 		{
-            if (filter.FilterItems == null || filter.FilterItems.Any())
+            if (filter.FilterItems == null || !filter.FilterItems.Any())
             {
 				return string.Empty;
             }
