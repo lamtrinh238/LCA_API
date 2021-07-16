@@ -16,7 +16,7 @@ namespace LCA.Service.Implementation
     public class UserReadService : DbContextService, IUserReadService
     {
 
-        public UserReadService(LcaDbContext dbContext): base(dbContext)
+        public UserReadService(LcaDbContext dbContext) : base(dbContext)
         {
         }
         public UserModel GetUserByID(int userID)
