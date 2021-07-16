@@ -34,19 +34,9 @@ namespace LCA.Service.Helpers
 				{
 					if (pro.Name == column.ColumnName)
                     {
-						//if (column.DataType == typeof(string))
-						//{
-						//	pro.SetValue(obj, dr.IsNull(column.ColumnName) ? "" : dr[column.ColumnName], null);
-						//}
-      //                  else 
-						//{
-							
-						//}
 						var colVal = dr.IsNull(column.ColumnName) ? null : dr[column.ColumnName];
 						pro.SetValue(obj, colVal, null);
 					}
-					else
-						continue;
 				}
 			}
 			return obj;
@@ -55,8 +45,10 @@ namespace LCA.Service.Helpers
 		{
 			filter = filter.CorrectFilter(source);
 			Type typeOfModel = source.GetType().GenericTypeArguments[0];
+			string sourceQuery = source.ToQueryString();
+
 			string tableNameAlias = typeOfModel.Name;
-			string sqlSelect = $"SELECT [{tableNameAlias}].* FROM ( { source.ToQueryString() } ) AS [{tableNameAlias}]";
+			string sqlSelect = $"SELECT [{tableNameAlias}].* FROM ( { sourceQuery } ) AS [{tableNameAlias}]";
 			string sqlWhere = filter.GeneratedWhere(tableNameAlias);
 			string sqlSort = filter.GenerateOrderBy(tableNameAlias);
 			string sqlPaging = $"OFFSET ({filter.SkipSize}) ROWS FETCH NEXT ({filter.PageSize}) ROWS ONLY";
@@ -66,7 +58,7 @@ namespace LCA.Service.Helpers
 
 		private static string GeneratedWhere(this BaseFilter filter, string tableNameAlias) 
 		{
-            if (filter.FilterItems == null || filter.FilterItems.Any())
+            if (filter.FilterItems == null || !filter.FilterItems.Any())
             {
 				return string.Empty;
             }
@@ -112,15 +104,12 @@ namespace LCA.Service.Helpers
 		private static string GenerateOrderBy(this BaseFilter filter, string tableNameAlias)
 		{
 			if (filter.SortItems == null || string.IsNullOrEmpty(filter.SortItems.FieldName))
+            {
 				return string.Empty;
+			}
 			string sortName = filter.SortItems.FieldName;
 			string sortOrder = filter.SortItems.SortType.ToString();
 			return $"ORDER BY [{tableNameAlias}].[{sortName}] {sortOrder}";
-		}
-		private static BaseFilter ParsingFilter(this BaseFilter filter) 
-		{
-			
-			return filter;
 		}
 
 		private static BaseFilter CorrectFilter(this BaseFilter filter, IQueryable source)
@@ -151,6 +140,9 @@ namespace LCA.Service.Helpers
 					}
 				}
 			}
+
+			// set order by default is first column. because order is required for paging
+			filter.SortItems = new SortItem() { FieldName = props.FirstOrDefault().Name, SortType = SortType.ASC };
 
 			// parsing sort
 			if (!string.IsNullOrEmpty(filter.SortText))

@@ -1,5 +1,6 @@
 ﻿using LCA.Data.Context;
 using LCA.Data.Domain;
+using LCA.Service.Helpers;
 using LCA.Service.Interface;
 using LCA.Service.Models.filters;
 using LCA.Services.Models;
@@ -40,36 +41,42 @@ namespace LCA.Service.Implementation
             return new UserCompanyModel(user, companiesOfUser);
         }
 
-        public IEnumerable<UserModel> Filter(UserFilter filter)
+        public IEnumerable<UserModel> Filter(BaseFilter filter)
         {
-            var query = this._dbContext.Users.Select(user => user);
+            var query = from user in _dbContext.Users
+                        select(new UserModel() 
+                        {
+                            UsrId = user.UsrId,
+                            UsrLoginname = user.UsrLoginname,
+                            UsrPassword = user.UsrPassword,
+                            UsrType = user.UsrType,
+                            UsrFullname = user.UsrFullname,
+                            UsrEmail = user.UsrEmail,
+                            UsrAdd = user.UsrAdd,
+                            UsrProid = user.UsrProid,
+                            UsrZip = user.UsrZip,
+                            UsrPhone1 = user.UsrPhone1,
+                            UsrPhone2 = user.UsrPhone2,
+                            UsrStatus = user.UsrStatus,
+                            UsrCreatedttm = user.UsrCreatedttm,
+                            UsrCreatedby = user.UsrCreatedby,
+                            UsrResetpwd = user.UsrResetpwd,
+                            UsrCity = user.UsrCity,
+                            UsrOrganization = user.UsrOrganization,
+                            UsrCompid = user.UsrCompid,
+                            UsrTraining = user.UsrTraining,
+                            UsrTrainingValid = user.UsrTrainingValid,
+                            UsrGdpr = user.UsrGdpr,
+                            LastLogin = user.LastLogin,
+                            UsrGuid = user.UsrGuid,
+                            UsrActive = user.UsrActive,
+                            UsrApproved = user.UsrApproved,
+                            UsrComments = user.UsrComments,
+                        });
 
-            if (filter.LoginName != null)
-            {
-                query = query.Where(user => user.UsrLoginname.Contains(filter.LoginName));
-            }
-
-            if (filter.ID != null)
-            {
-                query = query.Where(user => user.UsrId == filter.ID);
-            }
-
-            if (filter.Type != null)
-            {
-                query = query.Where(user => user.UsrType == filter.Type);
-            }
-
-            if (filter.FullName != null)
-            {
-                query = query.Where(user => user.UsrFullname.Contains(filter.FullName));
-            }
-
-            if (filter.Email != null)
-            {
-                query = query.Where(user => user.UsrEmail.Contains(filter.Email));
-            }
-
-            return query.Skip(filter.SkipSize).Take(filter.PageSize).Select(user => new UserModel(user)).AsNoTracking().AsEnumerable();
+            string sqlStr = query.ApplyFilterToQueryString(filter);
+            List<UserModel> users = _dbContext.RawSqlQuery(sqlStr).ConvertDataTable<UserModel>();
+            return users;
         }
     }
 }

@@ -32,7 +32,7 @@ namespace LCA.API.Controllers
         }
         // GET api/<UsersController>/5
         [HttpGet()]
-        public IEnumerable<UserModel> Get([FromQuery] UserFilter filter)
+        public IEnumerable<UserModel> Get([FromQuery] BaseFilter filter)
         {
             return this._userReadService.Filter(filter);
         }

@@ -1,9 +1,4 @@
-using System;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
-using LCA.Data.Domain;
-using System.Collections.Generic;
-using System.Data.Common;
 using System.Data;
 using System.Linq;
 
