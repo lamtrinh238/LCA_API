@@ -240,7 +240,8 @@ namespace LCA.Services.Implementation
         {
             var query = from com in _dbContext.Companies
                        join ctr in _dbContext.Countries on com.ComCountry equals ctr.Int
-                       select new ClientModel() {
+                       join sw in _dbContext.Comsws on com.ComId equals sw.ComId
+                        select new ClientModel() {
                             ComId = com.ComId,
                             ComType = com.ComType,
                             ComCompanyvat = com.ComCompanyvat,
@@ -277,7 +278,8 @@ namespace LCA.Services.Implementation
                             ComModulSubFase = com.ComModulSubFase,
                             ComModulSharing = com.ComModulSharing,
                             ComProgramOperator = com.ComProgramOperator,
-                            CountryName = ctr.CountryName
+                            CountryName = ctr.CountryName,
+                            ComSW = sw.SwId
                     };
             string sqlStr = query.ApplyFilterToQueryString(testFilter);
             List<ClientModel> clients = _dbContext.RawSqlQuery(sqlStr).ConvertDataTable<ClientModel>();
