@@ -38,6 +38,7 @@ namespace LCA.Service.Implementation
                 UsrGuid = userModel.UsrGuid,
                 UsrActive = userModel.UsrActive,
                 UsrApproved = userModel.UsrApproved,
+                UsrComments = userModel.UsrComments
             };
 
             this._dbContext.Entry<User>(newUser).State = EntityState.Added;
@@ -64,6 +65,7 @@ namespace LCA.Service.Implementation
             existingUser.UsrGuid = userModel.UsrGuid;
             existingUser.UsrActive = userModel.UsrActive;
             existingUser.UsrApproved = userModel.UsrApproved;
+            existingUser.UsrComments = userModel.UsrComments;
 
             this._dbContext.Entry<User>(existingUser).State = EntityState.Modified;
             this._dbContext.SaveChanges();
