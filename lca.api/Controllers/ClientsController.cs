@@ -34,6 +34,17 @@ namespace LCA.API.Controllers
             return _clientReadService.Filter(filter);
         }
 
+        // POST api/<ClientsController>
+        [HttpPost()]
+        public IActionResult Create([FromBody] ClientModel client)
+        {
+            var userID = _clientWriteService.CreateClient(client);
+            return Ok(new
+            {
+                ID = userID
+            });
+        }
+
         // PUT api/<ClientsController>/5
         [HttpPut("{clientID:int}")]
         public IActionResult Update(int clientID, [FromBody] ClientUpdateModel client)

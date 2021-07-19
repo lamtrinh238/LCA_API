@@ -18,6 +18,28 @@ namespace LCA.Service.Implementation
 
         }
 
+        public long CreateClient(ClientModel clientModel)
+        {
+            var newClient = new Company
+            {
+                ComType = 0,
+                ComCompanyvat = clientModel.ComCompanyvat,
+                ComCompanyname = clientModel.ComCompanyname,
+                ComEmail = clientModel.ComEmail,
+                ComAdd = clientModel.ComAdd,
+                ComZip = clientModel.ComZip,
+                ComCity = clientModel.ComCity,
+                ComPhone1 = clientModel.ComPhone1,
+                ComMainContact = clientModel.ComMainContact,
+                ComWeb = clientModel.ComWeb,
+                ComCountry = clientModel.ComCountry
+            };
+
+            this._dbContext.Entry<Company>(newClient).State = EntityState.Added;
+            this._dbContext.SaveChanges();
+            return newClient.ComId;
+        }
+
         public long UpdateClient(int clientID, ClientUpdateModel clientModel)
         {
             var existingClient = this._dbContext.Companies.SingleOrDefault(comp => comp.ComId == clientID);
@@ -59,10 +81,13 @@ namespace LCA.Service.Implementation
                     var programModule = this._dbContext.ProgramModules.SingleOrDefault(m => m.Id == sw);
                     if (programModule != null)
                     {
-                        var comSW = new Comsw();
-                        comSW.ComId = clientID;
-                        comSW.SwType = 1;
-                        comSW.SwId = sw;
+                        var comSW = new Comsw
+                        {
+                            ComId = clientID,
+                            SwType = 1,
+                            SwId = sw
+                        };
+
                         this._dbContext.Entry(comSW).State = EntityState.Added;
                     }
                 }
@@ -76,9 +101,11 @@ namespace LCA.Service.Implementation
                     var epdPcr = this._dbContext.Epdpcrs.SingleOrDefault(e => e.Id == pcr);
                     if (epdPcr != null)
                     {
-                        var comPcrLink = new ComPcrlink();
-                        comPcrLink.ComId = clientID;
-                        comPcrLink.PcrId = pcr;
+                        var comPcrLink = new ComPcrlink
+                        {
+                            ComId = clientID,
+                            PcrId = pcr
+                        };
                         this._dbContext.Entry(comPcrLink).State = EntityState.Added;
                     }
                 }
