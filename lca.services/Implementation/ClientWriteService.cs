@@ -37,6 +37,16 @@ namespace LCA.Service.Implementation
 
             this._dbContext.Entry<Company>(newClient).State = EntityState.Added;
             this._dbContext.SaveChanges();
+            var programModule = this._dbContext.ProgramModules.SingleOrDefault(m => m.Id == clientModel.ComSW);
+            var comSW = new Comsw
+            {
+                ComId = newClient.ComId,
+                SwType = 1,
+                SwId = clientModel.ComSW
+            };
+
+            this._dbContext.Entry(comSW).State = EntityState.Added;
+            this._dbContext.SaveChanges();
             return newClient.ComId;
         }
 
@@ -111,6 +121,13 @@ namespace LCA.Service.Implementation
                 }
             }
 
+            this._dbContext.SaveChanges();
+            return clientID;
+        }
+
+        public long DeleteClient(int clientID)
+        {
+            this._dbContext.Companies.RemoveRange(this._dbContext.Companies.Where(comp => comp.ComId == clientID));
             this._dbContext.SaveChanges();
             return clientID;
         }

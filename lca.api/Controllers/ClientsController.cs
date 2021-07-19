@@ -55,5 +55,16 @@ namespace LCA.API.Controllers
                 ID = clientID
             });
         }
+
+        // DELETE api/<ClientsController>/5
+        [HttpDelete("{clientID:int}")]
+        public IActionResult Delete(int clientID)
+        {
+            _clientWriteService.DeleteClient(clientID);
+            return Ok(new
+            {
+                ID = clientID
+            });
+        }
     }
 }
