@@ -6,6 +6,6 @@ namespace LCA.Service.Interface
 {
     public interface IClientWriteService
     {
-        long UpdateClient(int clientID, ClientModel client);
+        long UpdateClient(int clientID, ClientUpdateModel client);
     }
 }

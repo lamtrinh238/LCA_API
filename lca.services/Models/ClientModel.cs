@@ -92,6 +92,8 @@ namespace LCA.Services.Models
         public int? ComSW { get; set; }
     }
 
+
+
     public class ClientGeneralModel : ClientModel
     {
         public ClientGeneralModel(
@@ -129,5 +131,19 @@ namespace LCA.Services.Models
         }
         public int Id { get; set; }
         public int? PcrId { get; set; }
+    }
+
+    public class ClientUpdateModel : ClientModel
+    {
+        public ClientUpdateModel()
+        {
+        }
+
+        public ClientUpdateModel(Company company) : base(company, null)
+        {
+        }
+
+        public int[] ComSws { get; set; }
+        public int[] ComPcrs { get; set; }
     }
 }

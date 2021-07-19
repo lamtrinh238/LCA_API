@@ -36,7 +36,7 @@ namespace LCA.API.Controllers
 
         // PUT api/<ClientsController>/5
         [HttpPut("{clientID:int}")]
-        public IActionResult Update(int clientID, [FromBody] ClientModel client)
+        public IActionResult Update(int clientID, [FromBody] ClientUpdateModel client)
         {
             _clientWriteService.UpdateClient(clientID, client);
             return Ok(new
