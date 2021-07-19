@@ -12,10 +12,12 @@ namespace LCA.API.Controllers
     public class ClientsController : ControllerBase
     {
         private readonly IClientReadService _clientReadService;
+        private readonly IClientWriteService _clientWriteService;
 
-        public ClientsController(IClientReadService clientReadService)
+        public ClientsController(IClientReadService clientReadService, IClientWriteService clientWriteService)
         {
             this._clientReadService = clientReadService;
+            this._clientWriteService = clientWriteService;
         }
 
         // GET api/<ClientsController>/5
@@ -30,6 +32,17 @@ namespace LCA.API.Controllers
         public IEnumerable<ClientModel> Get([FromQuery] BaseFilter filter)
         {
             return _clientReadService.Filter(filter);
+        }
+
+        // PUT api/<ClientsController>/5
+        [HttpPut("{clientID:int}")]
+        public IActionResult Update(int clientID, [FromBody] ClientModel client)
+        {
+            _clientWriteService.UpdateClient(clientID, client);
+            return Ok(new
+            {
+                ID = clientID
+            });
         }
     }
 }
