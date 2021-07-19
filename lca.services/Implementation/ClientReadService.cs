@@ -12,19 +12,34 @@ using System.Linq;
 
 namespace LCA.Services.Implementation
 {
-    public class ClientService : IClientService
+    public class ClientReadService : IClientReadService
     {
         private readonly LcaDbContext _dbContext;
-        public ClientService(LcaDbContext dbContext)
+        public ClientReadService(LcaDbContext dbContext)
         {
             this._dbContext = dbContext;
         }
+
+        public ClientGeneralModel GetClientByID(int clientID)
+        {
+            var sws = from sw in _dbContext.Comsws
+                      where sw.ComId == clientID
+                      select new ComSWCom(sw);
+
+            var prcLinks = from prc in _dbContext.ComPcrlinks
+                           where prc.ComId == clientID
+                           select new ComPCRLinkCom(prc);
+
+            var client = from com in _dbContext.Companies
+                         join ctr in _dbContext.Countries on com.ComCountry equals ctr.Int
+                         where com.ComId == clientID
+                         select new ClientGeneralModel(com, ctr, sws.ToHashSet(), prcLinks.ToHashSet());
+
+            return client.FirstOrDefault();
+        }
+
         public IEnumerable<ClientModel> Filter(ClientFilter filter)
         {
-
-
-
-
             var query = this._dbContext.Companies.Select(client => client);
 
             if (filter.ID != null)
@@ -84,8 +99,8 @@ namespace LCA.Services.Implementation
 
             if (filter.Search != null)
             {
-                query = query.Where(client => 
-                EF.Functions.Like(client.ComId.ToString(), "%" + filter.Search + "%") 
+                query = query.Where(client =>
+                EF.Functions.Like(client.ComId.ToString(), "%" + filter.Search + "%")
                 || EF.Functions.Like(client.ComCompanyvat, "%" + filter.Search + "%")
                 || EF.Functions.Like(client.ComCompanyname, "%" + filter.Search + "%")
                 || EF.Functions.Like(client.ComEmail, "%" + filter.Search + "%")
@@ -113,14 +128,16 @@ namespace LCA.Services.Implementation
             if (filter.Sort != null)
             {
                 string[] sort = filter.Sort.Split(".");
-                if (sort.Length == 2) {
+                if (sort.Length == 2)
+                {
                     switch (sort[0])
                     {
                         case "ID":
                             if (sort[1] == "desc")
                             {
                                 query = query.OrderByDescending(client => client.ComId);
-                            } else
+                            }
+                            else
                             {
                                 query = query.OrderBy(client => client.ComId);
                             }
@@ -239,9 +256,10 @@ namespace LCA.Services.Implementation
         public IEnumerable<ClientModel> Filter(BaseFilter testFilter)
         {
             var query = from com in _dbContext.Companies
-                       join ctr in _dbContext.Countries on com.ComCountry equals ctr.Int
-                       join sw in _dbContext.Comsws on com.ComId equals sw.ComId
-                        select new ClientModel() {
+                        join ctr in _dbContext.Countries on com.ComCountry equals ctr.Int
+                        join sw in _dbContext.Comsws on com.ComId equals sw.ComId
+                        select new ClientModel()
+                        {
                             ComId = com.ComId,
                             ComType = com.ComType,
                             ComCompanyvat = com.ComCompanyvat,
@@ -280,7 +298,7 @@ namespace LCA.Services.Implementation
                             ComProgramOperator = com.ComProgramOperator,
                             CountryName = ctr.CountryName,
                             ComSW = sw.SwId
-                    };
+                        };
             string sqlStr = query.ApplyFilterToQueryString(testFilter);
             List<ClientModel> clients = _dbContext.RawSqlQuery(sqlStr).ConvertDataTable<ClientModel>();
             return clients;

@@ -11,18 +11,25 @@ namespace LCA.API.Controllers
     [ApiController]
     public class ClientsController : ControllerBase
     {
-        private readonly IClientService _clientService;
+        private readonly IClientReadService _clientReadService;
 
-        public ClientsController(IClientService clientService)
+        public ClientsController(IClientReadService clientReadService)
         {
-            this._clientService = clientService;
+            this._clientReadService = clientReadService;
+        }
+
+        // GET api/<ClientsController>/5
+        [HttpGet("{clientID:int}")]
+        public ClientGeneralModel Get(int clientID)
+        {
+            return _clientReadService.GetClientByID(clientID);
         }
 
         // GET api/<ClientsController>/5
         [HttpGet()]
         public IEnumerable<ClientModel> Get([FromQuery] BaseFilter filter)
         {
-            return _clientService.Filter(filter);
+            return _clientReadService.Filter(filter);
         }
     }
 }

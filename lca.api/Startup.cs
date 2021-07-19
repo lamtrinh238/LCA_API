@@ -98,7 +98,7 @@ namespace LCA.Api
             services.AddScoped<IEPDHeadingService, EPDHeadingService>();
             services.AddScoped<IUserReadService, UserReadService>();
             services.AddScoped<IUserWriteService, UserWriteService>();
-            services.AddScoped<IClientService, ClientService>();
+            services.AddScoped<IClientReadService, ClientReadService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
