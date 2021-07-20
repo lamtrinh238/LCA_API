@@ -20,6 +20,8 @@ namespace LCA.Service.Models.filters
 
         public string FilterText { get; set; }
 
+        public string GlobalSearch { get; set; }
+
         [JsonIgnore]
         internal int SkipSize { get
             {
