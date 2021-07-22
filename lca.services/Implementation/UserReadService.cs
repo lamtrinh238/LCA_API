@@ -78,5 +78,21 @@ namespace LCA.Service.Implementation
             List<UserModel> users = _dbContext.RawSqlQuery(sqlStr).ConvertDataTable<UserModel>();
             return users;
         }
+
+        public UserCompanyModel GetUserByUserNameAndPassword(string userName, string password)
+        {
+            var user = this._dbContext.Users.Where(user => user.UsrLoginname.Equals(userName) && user.UsrPassword.Equals(password)).AsNoTracking().SingleOrDefault();
+
+            var companiesOfUser = this._dbContext.Companies.Join(this._dbContext.Usrlinks,
+               comp => comp.ComId,
+               link => link.ComId,
+               (comp, link) => new
+               {
+                   Company = comp,
+                   UserID = link.UsrId
+               }).Where(compUser => compUser.UserID == user.UsrId).AsNoTracking().Select(compUser => compUser.Company).ToHashSet();
+
+            return new UserCompanyModel(user, companiesOfUser);
+        }
     }
 }

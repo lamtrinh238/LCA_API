@@ -8,17 +8,17 @@ namespace LCA.Api.Controllers
     [Route("[controller]")]
     public class AuthsController : ControllerBase
     {
-        private IAuthsService _userService;
+        private readonly IAuthsService _authService;
 
-        public AuthsController(IAuthsService userService)
+        public AuthsController(IAuthsService authService)
         {
-            _userService = userService;
+            _authService = authService;
         }
 
         [HttpPost("authenticate")]
         public IActionResult Authenticate(AuthenticateRequestModel model)
         {
-            var response = _userService.Authenticate(model);
+            var response = _authService.Authenticate(model);
 
             if (response == null)
                 return BadRequest(new { message = "Username or password is incorrect" });
@@ -26,12 +26,5 @@ namespace LCA.Api.Controllers
             return Ok(response);
         }
 
-        [Authorize]
-        [HttpGet]
-        public IActionResult GetAll()
-        {
-            var users = _userService.GetAll();
-            return Ok(users);
-        }
     }
 }
