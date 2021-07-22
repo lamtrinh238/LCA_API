@@ -4,8 +4,8 @@ using System.Collections.Generic;
 
 namespace LCA.Service.Interface
 {
-    public interface IClientGroupReadService
+    public interface IEPDPCRReadService
     {
-        public IEnumerable<ClientGroupModel> Filter(BaseFilter testFilter);
+        public IEnumerable<EPDPCRModel> Filter(BaseFilter testFilter);
     }
 }

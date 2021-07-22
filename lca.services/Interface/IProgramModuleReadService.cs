@@ -4,8 +4,8 @@ using System.Collections.Generic;
 
 namespace LCA.Service.Interface
 {
-    public interface IClientGroupReadService
+    public interface IProgramModuleReadService
     {
-        public IEnumerable<ClientGroupModel> Filter(BaseFilter testFilter);
+        IEnumerable<ProgramModuleModel> filter(BaseFilter testFilter);
     }
 }
