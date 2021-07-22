@@ -101,6 +101,7 @@ namespace LCA.Api
             services.AddScoped<IClientReadService, ClientReadService>();
             services.AddScoped<IClientWriteService, ClientWriteService>();
             services.AddScoped<ICountryReadService, CountryReadService>();
+            services.AddScoped<IClientGroupReadService, ClientGroupReadService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
