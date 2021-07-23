@@ -255,9 +255,13 @@ namespace LCA.Services.Implementation
 
         public IEnumerable<ClientModel> Filter(BaseFilter testFilter)
         {
+            var filterItems = testFilter.GetFilterItems()
+                .Find(c=> string.Equals(c.FieldName, "comsw", StringComparison.OrdinalIgnoreCase));
+            int comSWFilter = int.Parse(filterItems.Value.ToString());
+
             var query = from com in _dbContext.Companies
                         join ctr in _dbContext.Countries on com.ComCountry equals ctr.Int
-                        join sw in _dbContext.Comsws on com.ComId equals sw.ComId
+                        where _dbContext.Comsws.Where(c => c.SwId == comSWFilter && c.ComId == com.ComId).Any()
                         select new ClientModel()
                         {
                             ComId = com.ComId,
@@ -297,8 +301,9 @@ namespace LCA.Services.Implementation
                             ComModulSharing = com.ComModulSharing,
                             ComProgramOperator = com.ComProgramOperator,
                             CountryName = ctr.CountryName,
-                            ComSW = sw.SwId
+                            ComSW = comSWFilter
                         };
+
             string sqlStr = query.ApplyFilterToQueryString(testFilter);
             List<ClientModel> clients = _dbContext.RawSqlQuery(sqlStr).ConvertDataTable<ClientModel>();
             return clients;
