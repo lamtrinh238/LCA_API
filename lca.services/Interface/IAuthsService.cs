@@ -6,6 +6,5 @@ namespace LCA.Services.Interface
     public interface IAuthsService
     {
         AuthenticateResponseModel Authenticate(AuthenticateRequestModel model);
-        IEnumerable<UserModel> GetAll();
     }
 }

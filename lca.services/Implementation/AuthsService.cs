@@ -1,4 +1,5 @@
 using LCA.Data.Context;
+using LCA.Service.Interface;
 using LCA.Services.Interface;
 using LCA.Services.Models;
 using Microsoft.Extensions.Options;
@@ -15,19 +16,19 @@ namespace LCA.Services.Implementation
     public class AuthsService : IAuthsService
     {
         
-        private readonly LcaDbContext _dbContext;
+        private readonly IUserReadService _userReadService;
 
         private readonly AppSettingsModel _appSettings;
 
-        public AuthsService(IOptions<AppSettingsModel> appSettings, LcaDbContext dbContext)
+        public AuthsService(IOptions<AppSettingsModel> appSettings, IUserReadService userReadService)
         {
             _appSettings = appSettings.Value;
-            _dbContext = dbContext;
-        }
+            this._userReadService = userReadService;
+         }
 
         public AuthenticateResponseModel Authenticate(AuthenticateRequestModel model)
         {
-            var user = new UserModel(_dbContext.Users.SingleOrDefault(x => x.UsrLoginname == model.Username && x.UsrPassword == model.Password));
+            var user = this._userReadService.GetUserByUserNameAndPassword(model.Username, model.Password);
 
             // HARD CODE ROLES
             user.Roles = "Admin";
@@ -39,11 +40,6 @@ namespace LCA.Services.Implementation
             var token = generateJwtToken(user);
 
             return new AuthenticateResponseModel(user, token);
-        }
-
-        public IEnumerable<UserModel> GetAll()
-        {
-            return _dbContext.Users.Take(10).Select(s => new UserModel(s));
         }
 
         // helper methods

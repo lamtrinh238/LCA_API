@@ -1,6 +1,7 @@
 using LCA.Data.Domain;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json.Serialization;
 
 namespace LCA.Services.Models
@@ -76,10 +77,10 @@ namespace LCA.Services.Models
     {
         public UserCompanyModel(User user, ICollection<Company> companies): base(user)
         {
-            this.Companies = companies;
+            this.Companies = companies.Select(company => new CompanyModel(company)).ToList();
         }
 
-        public ICollection<Company> Companies { get; set; }
+        public ICollection<CompanyModel> Companies { get; set; }
 
     }
 }
