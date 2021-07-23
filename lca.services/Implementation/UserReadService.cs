@@ -83,6 +83,11 @@ namespace LCA.Service.Implementation
         {
             var user = this._dbContext.Users.Where(user => user.UsrLoginname.Equals(userName) && user.UsrPassword.Equals(password)).AsNoTracking().SingleOrDefault();
 
+            if (user == null)
+            {
+                return null;
+            }
+
             var companiesOfUser = this._dbContext.Companies.Join(this._dbContext.Usrlinks,
                comp => comp.ComId,
                link => link.ComId,
