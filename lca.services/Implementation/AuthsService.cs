@@ -30,11 +30,11 @@ namespace LCA.Services.Implementation
         {
             var user = this._userReadService.GetUserByUserNameAndPassword(model.Username, model.Password);
 
-            // HARD CODE ROLES
-            user.Roles = "Admin";
-
             // return null if user not found
             if (user == null) return null;
+
+            // HARD CODE ROLES
+            user.Roles = "Admin";
 
             // authentication successful so generate jwt token
             var token = generateJwtToken(user);
