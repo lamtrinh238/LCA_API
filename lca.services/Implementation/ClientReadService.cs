@@ -256,12 +256,12 @@ namespace LCA.Services.Implementation
         public IEnumerable<ClientModel> Filter(BaseFilter testFilter)
         {
             var filterItems = testFilter.GetFilterItems()
-                .Find(c=> string.Equals(c.FieldName, "comsw", StringComparison.OrdinalIgnoreCase));
-            int comSWFilter = int.Parse(filterItems.Value.ToString());
+                .Find(c => string.Equals(c.FieldName, "comsw", StringComparison.OrdinalIgnoreCase));
+            int comSWFilter = filterItems == null ? 0 : int.Parse(filterItems.Value.ToString());
 
             var query = from com in _dbContext.Companies
                         join ctr in _dbContext.Countries on com.ComCountry equals ctr.Int
-                        where _dbContext.Comsws.Where(c => c.SwId == comSWFilter && c.ComId == com.ComId).Any()
+                        where _dbContext.Comsws.Where(c => (comSWFilter != 0 ? c.SwId == comSWFilter : c.SwId != 0) && c.ComId == com.ComId).Any()
                         select new ClientModel()
                         {
                             ComId = com.ComId,
