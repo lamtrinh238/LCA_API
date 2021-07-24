@@ -49,7 +49,6 @@ namespace LCA.Service.Implementation
         public long UpdateUser(int userID, UserModel userModel)
         {
             var existingUser = this._dbContext.Users.SingleOrDefault(user => user.UsrId == userID);
-            existingUser.UsrLoginname = userModel.UsrLoginname;
             existingUser.UsrType = userModel.UsrType;
             existingUser.UsrFullname = userModel.UsrFullname;
             existingUser.UsrEmail = userModel.UsrEmail;
