@@ -4,8 +4,8 @@ using System.Collections.Generic;
 
 namespace LCA.Service.Interface
 {
-    public interface IClientService
+    public interface ICountryReadService
     {
-        public IEnumerable<ClientModel> Filter(BaseFilter testFilter);
+        public IEnumerable<CountryModel> Filter(BaseFilter testFilter);
     }
 }

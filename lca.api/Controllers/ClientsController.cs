@@ -11,18 +11,60 @@ namespace LCA.API.Controllers
     [ApiController]
     public class ClientsController : ControllerBase
     {
-        private readonly IClientService _clientService;
+        private readonly IClientReadService _clientReadService;
+        private readonly IClientWriteService _clientWriteService;
 
-        public ClientsController(IClientService clientService)
+        public ClientsController(IClientReadService clientReadService, IClientWriteService clientWriteService)
         {
-            this._clientService = clientService;
+            this._clientReadService = clientReadService;
+            this._clientWriteService = clientWriteService;
+        }
+
+        // GET api/<ClientsController>/5
+        [HttpGet("{clientID:int}")]
+        public ClientGeneralModel Get(int clientID)
+        {
+            return _clientReadService.GetClientByID(clientID);
         }
 
         // GET api/<ClientsController>/5
         [HttpGet()]
         public IEnumerable<ClientModel> Get([FromQuery] BaseFilter filter)
         {
-            return _clientService.Filter(filter);
+            return _clientReadService.Filter(filter);
+        }
+
+        // POST api/<ClientsController>
+        [HttpPost()]
+        public IActionResult Create([FromBody] ClientModel client)
+        {
+            var userID = _clientWriteService.CreateClient(client);
+            return Ok(new
+            {
+                ID = userID
+            });
+        }
+
+        // PUT api/<ClientsController>/5
+        [HttpPut("{clientID:int}")]
+        public IActionResult Update(int clientID, [FromBody] ClientUpdateModel client)
+        {
+            _clientWriteService.UpdateClient(clientID, client);
+            return Ok(new
+            {
+                ID = clientID
+            });
+        }
+
+        // DELETE api/<ClientsController>/5
+        [HttpDelete("{clientID:int}")]
+        public IActionResult Delete(int clientID)
+        {
+            _clientWriteService.DeleteClient(clientID);
+            return Ok(new
+            {
+                ID = clientID
+            });
         }
     }
 }

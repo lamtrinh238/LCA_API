@@ -13,7 +13,7 @@ namespace LCA.Service.Implementation
 {
     public class UserWriteService : DbContextService, IUserWriteService
     {
-        public UserWriteService(LcaDbContext dbContext): base(dbContext)
+        public UserWriteService(LcaDbContext dbContext) : base(dbContext)
         {
 
         }

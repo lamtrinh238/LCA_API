@@ -1,5 +1,6 @@
 ﻿using LCA.Data.Domain;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace LCA.Services.Models
@@ -89,5 +90,60 @@ namespace LCA.Services.Models
         public long? ComProgramOperator { get; set; }
         public string CountryName { get; set; }
         public int? ComSW { get; set; }
+    }
+
+
+
+    public class ClientGeneralModel : ClientModel
+    {
+        public ClientGeneralModel(
+            Company company,
+            Country coutry,
+            ICollection<ComSWCom> comsws,
+            ICollection<ComPCRLinkCom> comPCRLink) : base(company, coutry)
+        {
+            this.Comsws = comsws;
+            this.ComPCRLink = comPCRLink;
+        }
+        public ICollection<ComSWCom> Comsws { get; set; }
+        public ICollection<ComPCRLinkCom> ComPCRLink { get; set; }
+    }
+
+    public class ComSWCom
+    {
+        public ComSWCom(Comsw comsw)
+        {
+            this.Id = comsw.Id;
+            this.SwType = comsw.SwType;
+            this.SwId = comsw.SwId;
+        }
+        public int Id { get; set; }
+        public int? SwType { get; set; }
+        public int? SwId { get; set; }
+    }
+
+    public class ComPCRLinkCom
+    {
+        public ComPCRLinkCom(ComPcrlink comPcrlink)
+        {
+            this.Id = comPcrlink.Id;
+            this.PcrId = comPcrlink.PcrId;
+        }
+        public int Id { get; set; }
+        public int? PcrId { get; set; }
+    }
+
+    public class ClientUpdateModel : ClientModel
+    {
+        public ClientUpdateModel()
+        {
+        }
+
+        public ClientUpdateModel(Company company) : base(company, null)
+        {
+        }
+
+        public int[] ComSws { get; set; }
+        public int[] ComPcrs { get; set; }
     }
 }
