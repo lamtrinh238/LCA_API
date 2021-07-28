@@ -1,6 +1,7 @@
 using LCA.Data.Domain;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text.Json.Serialization;
 
@@ -82,5 +83,13 @@ namespace LCA.Services.Models
 
         public ICollection<CompanyModel> Companies { get; set; }
 
+    }
+
+    public class PasswordChangeModel
+    {
+        [Required]
+        public string CurrentPassword { get; set; }
+        [Required]
+        public string NewPassword { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using LCA.Data.Context;
 using LCA.Data.Domain;
+using LCA.Service.BusinessExceptions;
 using LCA.Service.Interface;
 using LCA.Services.Models;
 using Microsoft.EntityFrameworkCore;
@@ -17,6 +18,9 @@ namespace LCA.Service.Implementation
         {
 
         }
+
+
+
         public long CreateUser(UserModel userModel)
         {
             var newUser = new User
@@ -46,7 +50,7 @@ namespace LCA.Service.Implementation
             return newUser.UsrId;
         }
 
-        public long UpdateUser(int userID, UserModel userModel)
+        public long UpdateUser(long userID, UserModel userModel)
         {
             var existingUser = this._dbContext.Users.SingleOrDefault(user => user.UsrId == userID);
             existingUser.UsrType = userModel.UsrType;
@@ -69,6 +73,21 @@ namespace LCA.Service.Implementation
             this._dbContext.Entry<User>(existingUser).State = EntityState.Modified;
             this._dbContext.SaveChanges();
             return userID;
+        }
+
+        public long ChangePassword(long userID, PasswordChangeModel model)
+        {
+            var userInfo = this._dbContext.Users.SingleOrDefault(user => user.UsrId == userID && user.UsrPassword.Equals(model.CurrentPassword));
+
+            if (userInfo == null)
+            {
+                throw new InvalidUserOrPasswordException("Invalid user or password.");
+            }
+
+            userInfo.UsrPassword = model.NewPassword;
+            this._dbContext.Entry<User>(userInfo).State = EntityState.Modified;
+            this._dbContext.SaveChanges();
+            return userInfo.UsrId;
         }
     }
 }

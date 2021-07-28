@@ -10,6 +10,8 @@ namespace LCA.Service.Interface
     public interface IUserWriteService
     {
         long CreateUser(UserModel userModel);
-        long UpdateUser(int userID, UserModel user);
+        long UpdateUser(long userID, UserModel user);
+
+        long ChangePassword(long userID, PasswordChangeModel model);
     }
 }

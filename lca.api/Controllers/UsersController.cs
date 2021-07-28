@@ -1,4 +1,5 @@
-﻿using LCA.Service.Interface;
+﻿using LCA.Service.BusinessExceptions;
+using LCA.Service.Interface;
 using LCA.Service.Models.filters;
 using LCA.Services.Models;
 using Microsoft.AspNetCore.Http;
@@ -51,10 +52,45 @@ namespace LCA.API.Controllers
         }
 
         // PUT api/<UsersController>/5
-        [HttpPut("{userID:int}")]
-        public IActionResult Update(int userID, [FromBody] UserModel user)
+        [HttpPut("{userID:long}")]
+        public IActionResult Update(long userID, [FromBody] UserModel user)
         {
             this._userWriteService.UpdateUser(userID, user);
+            return Ok(new
+            {
+                ID = userID
+            });
+        }
+
+        // PUT api/<UsersController>/5/change_password
+        [HttpPut("{userID:long}/changePassword")]
+        public IActionResult ChangePassword(long userID, [FromBody] PasswordChangeModel model)
+        {
+            var currentUser = this.HttpContext.Items["User"] as UserModel;
+
+            if (currentUser.UsrId != userID)
+            {
+                return BadRequest(new
+                {
+                    code = "CANNOT_CHANGE_OTHER_USER_PASSWORD",
+                    message = "Forbidden: You cannot change other users' password.",
+                    statusCode = 401
+                });
+            }
+            try
+            {
+                this._userWriteService.ChangePassword(userID, model);
+            } catch(InvalidUserOrPasswordException)
+            {
+                return BadRequest(new
+                {
+                    code = "INVALID_USER_LOGIN_NAME_OR_PASSWORD",
+                    message = "Invalid user login name or password",
+                    statusCode = 401
+                });
+            }
+
+
             return Ok(new
             {
                 ID = userID
