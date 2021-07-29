@@ -81,7 +81,7 @@ namespace LCA.Service.Implementation
 
             if (userInfo == null)
             {
-                throw new InvalidUserOrPasswordException("Invalid user or password.");
+                throw new InvalidUserOrPasswordException();
             }
 
             userInfo.UsrPassword = model.NewPassword;

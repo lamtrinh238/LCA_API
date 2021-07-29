@@ -99,5 +99,17 @@ namespace LCA.Service.Implementation
 
             return new UserCompanyModel(user, companiesOfUser);
         }
+
+        public UserModel GetUserByEmail(string userEmail)
+        {
+            var user = this._dbContext.Users.Where(user => user.UsrEmail.Equals(userEmail)).SingleOrDefault();
+
+            if (user == null)
+            {
+                return null;
+            }
+
+            return new UserModel(user);
+        }
     }
 }

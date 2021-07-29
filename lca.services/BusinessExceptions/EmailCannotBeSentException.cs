@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 namespace LCA.Service.BusinessExceptions
 {
     [Serializable]
-    public class InvalidUserOrPasswordException : LcaException
+    public class EmailCannotBeSentException : LcaException
     {
-        public InvalidUserOrPasswordException() : base("Invalid user login name or password")
+        public EmailCannotBeSentException(): base("Failed to send the email.")
         {
-            this.Code = "INVALID_USER_LOGIN_NAME_OR_PASSWORD";
+            this.Code = "FAILED_TO_SEND_EMAIL";
             this.StatusCode = 401;
         }
     }

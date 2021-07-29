@@ -11,6 +11,7 @@ namespace LCA.Service.Interface
     public interface IUserReadService
     {
         UserModel GetUserByID(int userID);
+        UserModel GetUserByEmail(string userEmail);
         UserCompanyModel GetUserWithCompaniesByID(int userID);
         UserCompanyModel GetUserByUserNameAndPassword(string userName, string password);
         public IEnumerable<UserModel> Filter(BaseFilter filter);

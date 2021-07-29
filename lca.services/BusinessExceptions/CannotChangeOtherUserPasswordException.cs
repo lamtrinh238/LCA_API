@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 namespace LCA.Service.BusinessExceptions
 {
     [Serializable]
-    public class InvalidUserOrPasswordException : LcaException
+    public class CannotChangeOtherUserPasswordException: LcaException
     {
-        public InvalidUserOrPasswordException() : base("Invalid user login name or password")
+        public CannotChangeOtherUserPasswordException(): base("Forbidden: You cannot change other users' password.")
         {
-            this.Code = "INVALID_USER_LOGIN_NAME_OR_PASSWORD";
+            this.Code = "CANNOT_CHANGE_OTHER_USER_PASSWORD";
             this.StatusCode = 401;
         }
     }
