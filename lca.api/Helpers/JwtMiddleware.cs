@@ -32,6 +32,8 @@ namespace LCA.Api.Helpers
             await _next(context);
         }
 
+
+        // TODO refactor to use JsonWebTokenService
         private void AttachUserToContext(HttpContext context, string token)
         {
             try

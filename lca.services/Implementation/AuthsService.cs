@@ -15,7 +15,7 @@ namespace LCA.Services.Implementation
 {
     public class AuthsService : IAuthsService
     {
-        
+
         private readonly IUserReadService _userReadService;
 
         private readonly AppSettingsModel _appSettings;
@@ -24,8 +24,9 @@ namespace LCA.Services.Implementation
         {
             _appSettings = appSettings.Value;
             this._userReadService = userReadService;
-         }
+        }
 
+        // TODO refactor this one to use JsonWebTokenService
         public AuthenticateResponseModel Authenticate(AuthenticateRequestModel model)
         {
             var user = this._userReadService.GetUserByUserNameAndPassword(model.Username, model.Password);

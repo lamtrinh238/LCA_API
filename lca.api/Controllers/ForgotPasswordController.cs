@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace LCA.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api")]
     [ApiController]
     public class ForgotPasswordController : ControllerBase
     {
@@ -20,7 +20,8 @@ namespace LCA.API.Controllers
             _forgotPasswordService = forgotPasswordService;
         }
 
-        // POST api/<UsersController>
+        // POST api/forgotPassword
+        [Route("forgotPassword")]
         [HttpPost()]
         public IActionResult GeneratePasswordReset([FromBody] ForgotPasswordModel model)
         {
@@ -28,13 +29,10 @@ namespace LCA.API.Controllers
             {
                 _forgotPasswordService.CreateForgotPasswordRequest(model);
             }
-            catch (UserNotFoundException ex)
+            catch (LcaException ex)
             {
                 return BadRequest(ex.ToSerializableObject());
-            } catch (EmailCannotBeSentException ex)
-            {
-                return BadRequest(ex.ToSerializableObject());
-            }
+            } 
 
 
             return Ok(new
@@ -42,5 +40,25 @@ namespace LCA.API.Controllers
                 Message = "We send an email to you."
             });
         }
+
+        // POST api/resetPassword
+        [HttpPost("resetPassword")]
+        public IActionResult Reset([FromBody] ResetPasswordModel model)
+        {
+            try
+            {
+                _forgotPasswordService.ResetPassword(model);
+            }
+            catch (LcaException ex)
+            {
+                return BadRequest(ex.ToSerializableObject());
+            }
+
+            return Ok(new
+            {
+                Message = "Your password has been reset successfully."
+            });
+        }
+        
     }
 }

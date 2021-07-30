@@ -41,6 +41,7 @@ namespace LCA.Services.Models
             UsrActive = user.UsrActive;
             UsrApproved = user.UsrApproved;
             UsrComments = user.UsrComments;
+            Roles = "";
         }
         public string Roles { get; set; }
 

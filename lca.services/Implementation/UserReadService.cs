@@ -7,6 +7,7 @@ using LCA.Services.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,13 +20,13 @@ namespace LCA.Service.Implementation
         public UserReadService(LcaDbContext dbContext) : base(dbContext)
         {
         }
-        public UserModel GetUserByID(int userID)
+        public UserModel GetUserByID(long userID)
         {
             var user = this._dbContext.Users.Where(user => user.UsrId == userID).SingleOrDefault();
             return new UserModel(user);
         }
 
-        public UserCompanyModel GetUserWithCompaniesByID(int userID)
+        public UserCompanyModel GetUserWithCompaniesByID(long userID)
         {
             var user = this._dbContext.Users.Where(user => user.UsrId == userID).AsNoTracking().SingleOrDefault();
 
@@ -110,6 +111,13 @@ namespace LCA.Service.Implementation
             }
 
             return new UserModel(user);
+        }
+
+        public UserModel GetUserByToken(JwtSecurityToken jwtToken)
+        {
+            var userId = long.Parse(jwtToken.Claims.First(x => x.Type == "id").Value);
+
+            return this.GetUserByID(userId);
         }
     }
 }

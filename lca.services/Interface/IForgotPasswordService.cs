@@ -10,5 +10,7 @@ namespace LCA.Service.Interface
     public interface IForgotPasswordService
     {
         void CreateForgotPasswordRequest(ForgotPasswordModel request);
+        void ResetPassword(ResetPasswordModel request);
     }
+    
 }
