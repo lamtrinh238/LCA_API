@@ -23,7 +23,6 @@ namespace LCA.Service.Implementation
 
         public string GenerateToken(UserModel user, DateTime expireTime)
         {
-            // generate token that is valid for 7 days
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
             var tokenDescriptor = new SecurityTokenDescriptor
