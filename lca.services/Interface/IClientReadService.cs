@@ -9,5 +9,6 @@ namespace LCA.Service.Interface
         public ClientGeneralModel GetClientByID(int clientID);
         public IEnumerable<ClientModel> Filter(ClientFilter filter);
         public IEnumerable<ClientModel> Filter(BaseFilter testFilter);
+        public IEnumerable<UserModel> FilterUser(int clientID);
     }
 }

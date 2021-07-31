@@ -308,6 +308,22 @@ namespace LCA.Services.Implementation
             List<ClientModel> clients = _dbContext.RawSqlQuery(sqlStr).ConvertDataTable<ClientModel>();
             return clients;
         }
+        public IEnumerable<UserModel> FilterUser(int clientID)
+        {
+            var users = _dbContext.Users.Join(_dbContext.Usrlinks,
+                 usr => usr.UsrId,
+                 link => link.UsrId,
+                 (usr, link) => new
+                 {
+                     User = usr,
+                     ComID = link.ComId
+                 })
+                .Where(compUser => compUser.ComID == clientID)
+                .AsNoTracking()
+                .Select(compUser => new UserModel(compUser.User))
+                .ToHashSet();
 
+            return users;
+        }
     }
 }
