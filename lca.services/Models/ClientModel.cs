@@ -146,4 +146,21 @@ namespace LCA.Services.Models
         public int[] ComSws { get; set; }
         public int[] ComPcrs { get; set; }
     }
+
+    public class CompanyLinkModel
+    {
+        public CompanyLinkModel() { }
+        public CompanyLinkModel(Comlink comlink)
+        {
+            this.ComId = comlink.ComId;
+            this.LinkId = comlink.LinkId;
+            this.Type = comlink.Type;
+
+        }
+
+        public long Id { get; set; }
+        public long ComId { get; set; }
+        public long LinkId { get; set; }
+        public int? Type { get; set; }
+    }
 }

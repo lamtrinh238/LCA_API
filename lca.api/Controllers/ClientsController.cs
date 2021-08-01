@@ -73,5 +73,16 @@ namespace LCA.API.Controllers
         {
             return _clientReadService.FilterCompany(clientID, filter);
         }
+
+        // POST api/<ClientsController>
+        [HttpPost("companies")]
+        public IActionResult CreateCompanyLink([FromBody] CompanyLinkModel companyLink)
+        {
+            var compLink = _clientWriteService.CreateCompanyLink(companyLink);
+            return Ok(new
+            {
+                ID = compLink
+            });
+        }
     }
 }
