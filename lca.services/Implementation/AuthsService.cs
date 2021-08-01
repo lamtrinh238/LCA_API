@@ -30,6 +30,7 @@ namespace LCA.Services.Implementation
         public AuthenticateResponseModel Authenticate(AuthenticateRequestModel model)
         {
             var user = this._userReadService.GetUserByUserNameAndPassword(model.Username, model.Password);
+            user.Companies = user.Companies.OrderBy(o => o.ComCompanyname).ToList();
 
             // return null if user not found
             if (user == null) return null;

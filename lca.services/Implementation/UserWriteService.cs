@@ -23,6 +23,12 @@ namespace LCA.Service.Implementation
 
         public long CreateUser(UserModel userModel)
         {
+            if (_dbContext.Users.Where(c=> c.UsrLoginname.Equals(userModel.UsrLoginname) 
+                    || c.UsrEmail.Equals(userModel.UsrEmail)).Any())
+            {
+                throw new UserAlreadyExistException();
+            }
+
             var newUser = new User
             {
                 UsrLoginname = userModel.UsrLoginname,
@@ -53,6 +59,10 @@ namespace LCA.Service.Implementation
         public long UpdateUser(long userID, UserModel userModel)
         {
             var existingUser = this._dbContext.Users.SingleOrDefault(user => user.UsrId == userID);
+            if (existingUser == null)
+            {
+                throw new NotSupportedException();
+            }
             existingUser.UsrType = userModel.UsrType;
             existingUser.UsrFullname = userModel.UsrFullname;
             existingUser.UsrEmail = userModel.UsrEmail;

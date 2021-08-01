@@ -47,7 +47,7 @@ namespace LCA.Service.Implementation
             {
                 ToEmail = request.UserEmail,
                 Body = $"Your password reset link is <a href=\"https://lca-dev.web.app/passport/reset-password?token={token}\">Reset your password</a>",
-                Subject = "Reset password for " + request.UserEmail
+                Subject = "LCA.no - Reset password for " + request.UserEmail
             }); ;
             
         }
