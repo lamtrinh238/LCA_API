@@ -308,6 +308,5 @@ namespace LCA.Services.Implementation
             List<ClientModel> clients = _dbContext.RawSqlQuery(sqlStr).ConvertDataTable<ClientModel>();
             return clients;
         }
-
     }
 }

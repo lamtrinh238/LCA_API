@@ -18,5 +18,6 @@ namespace LCA.Service.Interface
         UserCompanyModel GetUserWithCompaniesByID(long userID);
         UserCompanyModel GetUserByUserNameAndPassword(string userName, string password);
         public IEnumerable<UserModel> Filter(BaseFilter filter);
+        public IEnumerable<UserModel> FilterByCompany(int clientID);
     }
 }

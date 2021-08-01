@@ -119,5 +119,23 @@ namespace LCA.Service.Implementation
 
             return this.GetUserByID(userId);
         }
+
+        public IEnumerable<UserModel> FilterByCompany(int clientID)
+        {
+            var users = _dbContext.Users.Join(_dbContext.Usrlinks,
+                 usr => usr.UsrId,
+                 link => link.UsrId,
+                 (usr, link) => new
+                 {
+                     User = usr,
+                     ComID = link.ComId
+                 })
+                .Where(compUser => compUser.ComID == clientID)
+                .AsNoTracking()
+                .Select(compUser => new UserModel(compUser.User))
+                .ToHashSet();
+
+            return users;
+        }
     }
 }

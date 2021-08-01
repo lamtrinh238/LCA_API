@@ -86,6 +86,13 @@ namespace LCA.API.Controllers
             {
                 ID = userID
             });
-        }        
+        }
+
+        // GET api/<ClientsController>/5/users
+        [HttpGet("clients/{clientID:int}")]
+        public IEnumerable<UserModel> GetUsers(int clientID)
+        {
+            return _userReadService.FilterByCompany(clientID);
+        }
     }
 }
