@@ -66,5 +66,23 @@ namespace LCA.API.Controllers
                 ID = clientID
             });
         }
+
+        // GET api/<ClientsController>/5
+        [HttpGet("{clientID:int}/companies")]
+        public IEnumerable<ClientModel> GetCompany(int clientID, [FromQuery] BaseFilter filter)
+        {
+            return _clientReadService.FilterCompany(clientID, filter);
+        }
+
+        // POST api/<ClientsController>
+        [HttpPost("companies")]
+        public IActionResult CreateCompanyLink([FromBody] CompanyLinkModel companyLink)
+        {
+            var compLink = _clientWriteService.CreateCompanyLink(companyLink);
+            return Ok(new
+            {
+                ID = compLink
+            });
+        }
     }
 }

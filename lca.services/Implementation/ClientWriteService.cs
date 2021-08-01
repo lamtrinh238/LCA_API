@@ -131,5 +131,20 @@ namespace LCA.Service.Implementation
             this._dbContext.SaveChanges();
             return clientID;
         }
+
+        public long CreateCompanyLink(CompanyLinkModel companyLink)
+        {
+            var newCompanyLink = new Comlink
+            {
+                ComId = companyLink.ComId,
+                LinkId = companyLink.LinkId,
+                Type = companyLink.Type,
+            };
+
+            this._dbContext.Entry(newCompanyLink).State = EntityState.Added;
+            this._dbContext.SaveChanges();
+            return newCompanyLink.Id;
+
+        }
     }
 }
