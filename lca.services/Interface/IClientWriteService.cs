@@ -9,5 +9,6 @@ namespace LCA.Service.Interface
         long CreateClient(ClientModel client);
         long UpdateClient(int clientID, ClientUpdateModel client);
         long DeleteClient(int clientID);
+        long CreateCompanyLink(CompanyLinkModel companyLink);
     }
 }

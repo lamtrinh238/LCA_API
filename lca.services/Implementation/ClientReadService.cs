@@ -309,5 +309,29 @@ namespace LCA.Services.Implementation
             return clients;
         }
 
+        public IEnumerable<ClientModel> FilterCompany(int clientID, BaseFilter filter)
+        {
+            var filterItems = filter.GetFilterItems()
+                .Find(c => string.Equals(c.FieldName, "linkType", StringComparison.OrdinalIgnoreCase));
+            int linkType = filterItems == null ? 0 : int.Parse(filterItems.Value.ToString());
+
+            var query = from com in _dbContext.Companies
+                        where _dbContext.Comlinks.Where(l => l.ComId == clientID && l.Type == linkType && l.LinkId == com.ComId).Any()
+                        select new ClientModel()
+                        {
+                            ComId = com.ComId,
+                            ComType = com.ComType,
+                            ComCompanyvat = com.ComCompanyvat,
+                            ComCompanyname = com.ComCompanyname,
+                            ComEmail = com.ComEmail,
+                            ComAdd = com.ComAdd,
+                            ComZip = com.ComZip,
+                            ComCity = com.ComCity,
+                            ComPhone1 = com.ComPhone1,
+                        };
+
+            List<ClientModel> clients = query.Select(com => com).ToList();
+            return clients;
+        }
     }
 }

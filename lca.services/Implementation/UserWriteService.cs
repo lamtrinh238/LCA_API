@@ -1,5 +1,6 @@
 ﻿using LCA.Data.Context;
 using LCA.Data.Domain;
+using LCA.Service.BusinessExceptions;
 using LCA.Service.Interface;
 using LCA.Services.Models;
 using Microsoft.EntityFrameworkCore;
@@ -17,8 +18,17 @@ namespace LCA.Service.Implementation
         {
 
         }
+
+
+
         public long CreateUser(UserModel userModel)
         {
+            if (_dbContext.Users.Where(c=> c.UsrLoginname.Equals(userModel.UsrLoginname) 
+                    || c.UsrEmail.Equals(userModel.UsrEmail)).Any())
+            {
+                throw new UserAlreadyExistException();
+            }
+
             var newUser = new User
             {
                 UsrLoginname = userModel.UsrLoginname,
@@ -46,9 +56,13 @@ namespace LCA.Service.Implementation
             return newUser.UsrId;
         }
 
-        public long UpdateUser(int userID, UserModel userModel)
+        public long UpdateUser(long userID, UserModel userModel)
         {
             var existingUser = this._dbContext.Users.SingleOrDefault(user => user.UsrId == userID);
+            if (existingUser == null)
+            {
+                throw new NotSupportedException();
+            }
             existingUser.UsrType = userModel.UsrType;
             existingUser.UsrFullname = userModel.UsrFullname;
             existingUser.UsrEmail = userModel.UsrEmail;
@@ -69,6 +83,21 @@ namespace LCA.Service.Implementation
             this._dbContext.Entry<User>(existingUser).State = EntityState.Modified;
             this._dbContext.SaveChanges();
             return userID;
+        }
+
+        public long ChangePassword(long userID, PasswordChangeModel model)
+        {
+            var userInfo = this._dbContext.Users.SingleOrDefault(user => user.UsrId == userID && user.UsrPassword.Equals(model.CurrentPassword));
+
+            if (userInfo == null)
+            {
+                throw new InvalidUserOrPasswordException();
+            }
+
+            userInfo.UsrPassword = model.NewPassword;
+            this._dbContext.Entry<User>(userInfo).State = EntityState.Modified;
+            this._dbContext.SaveChanges();
+            return userInfo.UsrId;
         }
     }
 }

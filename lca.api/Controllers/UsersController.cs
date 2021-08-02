@@ -1,4 +1,6 @@
-﻿using LCA.Service.Interface;
+﻿using LCA.Service.BusinessExceptions;
+using LCA.Service.Interface;
+using LCA.Service.Models;
 using LCA.Service.Models.filters;
 using LCA.Services.Models;
 using Microsoft.AspNetCore.Http;
@@ -20,30 +22,30 @@ namespace LCA.API.Controllers
 
         public UsersController(IUserReadService userReadService, IUserWriteService userWriteService)
         {
-            this._userReadService = userReadService;
-            this._userWriteService = userWriteService;
+            _userReadService = userReadService;
+            _userWriteService = userWriteService;
         }
 
         // GET api/<UsersController>/5
         [HttpGet("{userID:int}")]
         public UserCompanyModel Get(int userID)
         {
-            return this._userReadService.GetUserWithCompaniesByID(userID);
+            return _userReadService.GetUserWithCompaniesByID(userID);
         }
         // GET api/<UsersController>/5
         [HttpGet()]
         public IEnumerable<UserModel> Get([FromQuery] BaseFilter filter)
         {
-            return this._userReadService.Filter(filter);
+            return _userReadService.Filter(filter);
         }
 
         // POST api/<UsersController>
         [HttpPost()]
         public IActionResult Create([FromBody] UserModel user)
         {
-            var currentUser = this.HttpContext.Items["User"] as UserModel;
+            UserModel currentUser = HttpContext.Items["User"] as UserModel;
             user.UsrCreatedby = currentUser.UsrId;
-            var userID = this._userWriteService.CreateUser(user);
+            var userID = _userWriteService.CreateUser(user);
             return Ok(new
             {
                 ID = userID
@@ -51,14 +53,46 @@ namespace LCA.API.Controllers
         }
 
         // PUT api/<UsersController>/5
-        [HttpPut("{userID:int}")]
-        public IActionResult Update(int userID, [FromBody] UserModel user)
+        [HttpPut("{userID:long}")]
+        public IActionResult Update(long userID, [FromBody] UserModel user)
         {
-            this._userWriteService.UpdateUser(userID, user);
+            _userWriteService.UpdateUser(userID, user);
             return Ok(new
             {
                 ID = userID
             });
+        }
+
+        // PUT api/<UsersController>/5/change_password
+        [HttpPut("{userID:long}/changePassword")]
+        public IActionResult ChangePassword(long userID, [FromBody] PasswordChangeModel model)
+        {
+            UserModel currentUser = HttpContext.Items["User"] as UserModel;
+
+            if (currentUser.UsrId != userID)
+            {
+                return BadRequest(new CannotChangeOtherUserPasswordException().ToSerializableObject());
+            }
+            try
+            {
+                _userWriteService.ChangePassword(userID, model);
+            } catch(InvalidUserOrPasswordException ex)
+            {
+                return BadRequest(ex.ToSerializableObject());
+            }
+
+
+            return Ok(new
+            {
+                ID = userID
+            });
+        }
+
+        // GET api/<ClientsController>/5/users
+        [HttpGet("clients/{clientID:int}")]
+        public IEnumerable<UserModel> GetUsers(int clientID)
+        {
+            return _userReadService.FilterByCompany(clientID);
         }
     }
 }

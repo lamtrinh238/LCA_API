@@ -2,6 +2,7 @@ using LCA.Api.Helpers;
 using LCA.Data.Context;
 using LCA.Service.Implementation;
 using LCA.Service.Interface;
+using LCA.Service.Models;
 using LCA.Services.Implementation;
 using LCA.Services.Interface;
 using LCA.Services.Models;
@@ -92,6 +93,7 @@ namespace LCA.Api
 
             // configure strongly typed settings object
             services.Configure<AppSettingsModel>(Configuration.GetSection("AppSettings"));
+            services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
 
             // configure DI for application services
             services.AddScoped<IAuthsService, AuthsService>();
@@ -104,6 +106,9 @@ namespace LCA.Api
             services.AddScoped<IClientGroupReadService, ClientGroupReadService>();
             services.AddScoped<IEPDPCRReadService, EPDPCRReadService>();
             services.AddScoped<IProgramModuleReadService, ProgramModuleReadService>();
+            services.AddScoped<IForgotPasswordService, ForgotPasswordService>();
+            services.AddScoped<IJsonWebTokenService, JsonWebTokenService>();
+            services.AddScoped<IEmailService, EmailService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

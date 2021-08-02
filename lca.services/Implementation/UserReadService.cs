@@ -7,6 +7,7 @@ using LCA.Services.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,13 +20,13 @@ namespace LCA.Service.Implementation
         public UserReadService(LcaDbContext dbContext) : base(dbContext)
         {
         }
-        public UserModel GetUserByID(int userID)
+        public UserModel GetUserByID(long userID)
         {
             var user = this._dbContext.Users.Where(user => user.UsrId == userID).SingleOrDefault();
             return new UserModel(user);
         }
 
-        public UserCompanyModel GetUserWithCompaniesByID(int userID)
+        public UserCompanyModel GetUserWithCompaniesByID(long userID)
         {
             var user = this._dbContext.Users.Where(user => user.UsrId == userID).AsNoTracking().SingleOrDefault();
 
@@ -98,6 +99,43 @@ namespace LCA.Service.Implementation
                }).Where(compUser => compUser.UserID == user.UsrId).AsNoTracking().Select(compUser => compUser.Company).ToHashSet();
 
             return new UserCompanyModel(user, companiesOfUser);
+        }
+
+        public UserModel GetUserByEmail(string userEmail)
+        {
+            var user = this._dbContext.Users.Where(user => user.UsrEmail.Equals(userEmail)).SingleOrDefault();
+
+            if (user == null)
+            {
+                return null;
+            }
+
+            return new UserModel(user);
+        }
+
+        public UserModel GetUserByToken(JwtSecurityToken jwtToken)
+        {
+            var userId = long.Parse(jwtToken.Claims.First(x => x.Type == "id").Value);
+
+            return this.GetUserByID(userId);
+        }
+
+        public IEnumerable<UserModel> FilterByCompany(int clientID)
+        {
+            var users = _dbContext.Users.Join(_dbContext.Usrlinks,
+                 usr => usr.UsrId,
+                 link => link.UsrId,
+                 (usr, link) => new
+                 {
+                     User = usr,
+                     ComID = link.ComId
+                 })
+                .Where(compUser => compUser.ComID == clientID)
+                .AsNoTracking()
+                .Select(compUser => new UserModel(compUser.User))
+                .ToHashSet();
+
+            return users;
         }
     }
 }
