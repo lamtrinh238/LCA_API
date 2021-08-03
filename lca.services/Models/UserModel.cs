@@ -93,4 +93,20 @@ namespace LCA.Services.Models
         [Required]
         public string NewPassword { get; set; }
     }
+
+    public class UsrCompLinkModel
+    {
+        public UsrCompLinkModel() {}
+
+        public UsrCompLinkModel(Usrlink usrlink)
+        {
+            this.UsrId = usrlink.UsrId;
+            this.ComId = usrlink.ComId;
+            this.UsrType = usrlink.UsrType;
+        }
+        public long Id { get; set; }
+        public long UsrId { get; set; }
+        public long ComId { get; set; }
+        public long UsrType { get; set; }
+    }
 }

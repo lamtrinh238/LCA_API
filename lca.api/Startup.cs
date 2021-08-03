@@ -109,6 +109,7 @@ namespace LCA.Api
             services.AddScoped<IForgotPasswordService, ForgotPasswordService>();
             services.AddScoped<IJsonWebTokenService, JsonWebTokenService>();
             services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<ICompanyReadService, CompanyReadService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

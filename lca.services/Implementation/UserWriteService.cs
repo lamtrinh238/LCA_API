@@ -99,5 +99,27 @@ namespace LCA.Service.Implementation
             this._dbContext.SaveChanges();
             return userInfo.UsrId;
         }
+
+        public long CreateUserCompLink(UsrCompLinkModel usrlink)
+        {
+            var newUserCompLink = new Usrlink
+            {
+                UsrId = usrlink.UsrId,
+                ComId = usrlink.ComId,
+                UsrType = usrlink.UsrType,
+            };
+
+           this._dbContext.Entry(newUserCompLink).State = EntityState.Added;
+            this._dbContext.SaveChanges();
+            return newUserCompLink.Id;
+
+        }
+
+        public long DeleteUserCompLink(int companyid, int usrid)
+        {
+            this._dbContext.Usrlinks.RemoveRange(this._dbContext.Usrlinks.Where(usrlink => usrlink.UsrId == usrid && usrlink.ComId == companyid));
+            this._dbContext.SaveChanges();
+            return companyid; 
+        }
     }
 }

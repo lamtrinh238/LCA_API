@@ -13,5 +13,9 @@ namespace LCA.Service.Interface
         long UpdateUser(long userID, UserModel user);
 
         long ChangePassword(long userID, PasswordChangeModel model);
+
+        long CreateUserCompLink(UsrCompLinkModel usrlink);
+
+        long DeleteUserCompLink(int companyid, int usrid);
     }
 }
