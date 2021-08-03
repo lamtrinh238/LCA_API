@@ -11,8 +11,7 @@ namespace LCA.Service.BusinessExceptions
     {
         public InvalidUserOrPasswordException() : base("Invalid user login name or password")
         {
-            this.Code = "INVALID_USER_LOGIN_NAME_OR_PASSWORD";
-            this.StatusCode = 401;
+            this.MessageCode = "INVALID_USER_LOGIN_NAME_OR_PASSWORD";
         }
     }
 }

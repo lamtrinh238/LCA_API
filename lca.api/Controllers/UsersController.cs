@@ -71,15 +71,10 @@ namespace LCA.API.Controllers
 
             if (currentUser.UsrId != userID)
             {
-                return BadRequest(new CannotChangeOtherUserPasswordException().ToSerializableObject());
+                throw new CannotChangeOtherUserPasswordException();
             }
-            try
-            {
-                _userWriteService.ChangePassword(userID, model);
-            } catch(InvalidUserOrPasswordException ex)
-            {
-                return BadRequest(ex.ToSerializableObject());
-            }
+
+            _userWriteService.ChangePassword(userID, model);
 
 
             return Ok(new

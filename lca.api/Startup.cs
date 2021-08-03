@@ -1,4 +1,4 @@
-using LCA.Api.Helpers;
+using LCA.API.Middlewares;
 using LCA.Data.Context;
 using LCA.Service.Implementation;
 using LCA.Service.Interface;
@@ -133,6 +133,9 @@ namespace LCA.Api
                 .AllowAnyOrigin()
                 .AllowAnyMethod()
                 .AllowAnyHeader());
+
+            // global error handler
+            app.UseMiddleware<ErrorHandlerMiddleware>();
 
 
             app.UseEndpoints(endpoints =>

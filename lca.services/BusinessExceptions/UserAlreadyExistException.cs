@@ -12,8 +12,8 @@ namespace LCA.Service.BusinessExceptions
     {
         public UserAlreadyExistException() : base("Invalid user login name or password")
         {
-            this.Code = "USER_ALREADY_EXIST";
-            this.StatusCode = (int)HttpStatusCode.BadRequest;
+            this.MessageCode = "USER_ALREADY_EXIST";
+            this.StatusCode = HttpStatusCode.Conflict;
         }
     }
 }

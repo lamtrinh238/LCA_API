@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,6 +15,12 @@ namespace LCA.Service.BusinessExceptions
 
         public LcaException(string errorMessage) : base(errorMessage)
         {
+            StatusCode = HttpStatusCode.BadRequest;
+        }
+
+        public LcaException(string message, params object[] args) : base(String.Format(CultureInfo.CurrentCulture, message, args))
+        {
+            StatusCode = HttpStatusCode.BadRequest;
         }
 
         public Object ToSerializableObject()
@@ -20,14 +28,14 @@ namespace LCA.Service.BusinessExceptions
 
             return new
             {
-                Code,
+                MessageCode,
                 StatusCode,
                 Message
             };
         }
 
 
-        public string Code { get; set; }
-        public int StatusCode { get; set; }
+        public string MessageCode { get; set; }
+        public HttpStatusCode StatusCode { get; set; }
     }
 }

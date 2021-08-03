@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LCA.Api.Helpers
+namespace LCA.API.Middlewares
 {
     public class JwtMiddleware
     {

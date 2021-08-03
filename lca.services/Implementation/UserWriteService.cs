@@ -61,8 +61,9 @@ namespace LCA.Service.Implementation
             var existingUser = this._dbContext.Users.SingleOrDefault(user => user.UsrId == userID);
             if (existingUser == null)
             {
-                throw new NotSupportedException();
+                throw new UserNotFoundException();
             }
+
             existingUser.UsrType = userModel.UsrType;
             existingUser.UsrFullname = userModel.UsrFullname;
             existingUser.UsrEmail = userModel.UsrEmail;

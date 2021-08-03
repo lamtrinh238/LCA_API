@@ -11,8 +11,7 @@ namespace LCA.Service.BusinessExceptions
     {
         public EmailCannotBeSentException(): base("Failed to send the email.")
         {
-            this.Code = "FAILED_TO_SEND_EMAIL";
-            this.StatusCode = 401;
+            this.MessageCode = "FAILED_TO_SEND_EMAIL";
         }
     }
 }

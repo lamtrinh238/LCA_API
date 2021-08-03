@@ -11,8 +11,8 @@ namespace LCA.Service.BusinessExceptions
     {
         public UserNotFoundException() : base("User does not exist.")
         {
-            Code = "USER_NOT_FOUND";
-            StatusCode = 401;
+            MessageCode = "USER_NOT_FOUND";
+            StatusCode = System.Net.HttpStatusCode.NotFound;
         }
     }
 }

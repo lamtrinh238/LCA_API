@@ -11,8 +11,8 @@ namespace LCA.Service.BusinessExceptions
     {
         public CannotChangeOtherUserPasswordException(): base("Forbidden: You cannot change other users' password.")
         {
-            this.Code = "CANNOT_CHANGE_OTHER_USER_PASSWORD";
-            this.StatusCode = 401;
+            this.MessageCode = "CANNOT_CHANGE_OTHER_USER_PASSWORD";
+            this.StatusCode = System.Net.HttpStatusCode.Unauthorized;
         }
     }
 }

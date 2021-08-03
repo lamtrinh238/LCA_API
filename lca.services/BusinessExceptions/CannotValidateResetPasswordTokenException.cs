@@ -10,8 +10,8 @@ namespace LCA.Service.BusinessExceptions
     {
         public CannotValidateResetPasswordTokenException() : base("Cannot validate reset password token")
         {
-            Code = "CANNOT_VALIDATE_RESET_PASSWORD_TOKEN";
-            StatusCode = 401;
+            MessageCode = "CANNOT_VALIDATE_RESET_PASSWORD_TOKEN";
+            StatusCode = System.Net.HttpStatusCode.BadRequest;
         }
     }
 }

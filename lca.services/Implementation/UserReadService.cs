@@ -1,5 +1,6 @@
 ﻿using LCA.Data.Context;
 using LCA.Data.Domain;
+using LCA.Service.BusinessExceptions;
 using LCA.Service.Helpers;
 using LCA.Service.Interface;
 using LCA.Service.Models.filters;
@@ -23,12 +24,15 @@ namespace LCA.Service.Implementation
         public UserModel GetUserByID(long userID)
         {
             var user = this._dbContext.Users.Where(user => user.UsrId == userID).SingleOrDefault();
+            if (user == null) throw new UserNotFoundException();
             return new UserModel(user);
         }
 
         public UserCompanyModel GetUserWithCompaniesByID(long userID)
         {
             var user = this._dbContext.Users.Where(user => user.UsrId == userID).AsNoTracking().SingleOrDefault();
+
+            if (user == null) throw new UserNotFoundException();
 
             var companiesOfUser = this._dbContext.Companies.Join(this._dbContext.Usrlinks,
                comp => comp.ComId,
@@ -84,10 +88,8 @@ namespace LCA.Service.Implementation
         {
             var user = this._dbContext.Users.Where(user => user.UsrLoginname.Equals(userName) && user.UsrPassword.Equals(password)).AsNoTracking().SingleOrDefault();
 
-            if (user == null)
-            {
-                return null;
-            }
+            // return null if user not found
+            if (user == null) throw new InvalidUserOrPasswordException();
 
             var companiesOfUser = this._dbContext.Companies.Join(this._dbContext.Usrlinks,
                comp => comp.ComId,
@@ -105,10 +107,7 @@ namespace LCA.Service.Implementation
         {
             var user = this._dbContext.Users.Where(user => user.UsrEmail.Equals(userEmail)).SingleOrDefault();
 
-            if (user == null)
-            {
-                return null;
-            }
+            if (user == null) throw new UserNotFoundException();
 
             return new UserModel(user);
         }

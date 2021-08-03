@@ -1,4 +1,5 @@
 using LCA.Data.Context;
+using LCA.Service.BusinessExceptions;
 using LCA.Service.Interface;
 using LCA.Services.Interface;
 using LCA.Services.Models;
@@ -30,10 +31,8 @@ namespace LCA.Services.Implementation
         public AuthenticateResponseModel Authenticate(AuthenticateRequestModel model)
         {
             var user = this._userReadService.GetUserByUserNameAndPassword(model.Username, model.Password);
-            user.Companies = user.Companies.OrderBy(o => o.ComCompanyname).ToList();
 
-            // return null if user not found
-            if (user == null) return null;
+            user.Companies = user.Companies.OrderBy(o => o.ComCompanyname).ToList();
 
             // HARD CODE ROLES
             user.Roles = "Admin";

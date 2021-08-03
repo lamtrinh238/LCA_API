@@ -25,15 +25,8 @@ namespace LCA.API.Controllers
         [HttpPost()]
         public IActionResult GeneratePasswordReset([FromBody] ForgotPasswordModel model)
         {
-            try
-            {
-                _forgotPasswordService.CreateForgotPasswordRequest(model);
-            }
-            catch (LcaException ex)
-            {
-                return BadRequest(ex.ToSerializableObject());
-            } 
 
+            _forgotPasswordService.CreateForgotPasswordRequest(model);
 
             return Ok(new
             {
@@ -45,20 +38,14 @@ namespace LCA.API.Controllers
         [HttpPost("resetPassword")]
         public IActionResult Reset([FromBody] ResetPasswordModel model)
         {
-            try
-            {
-                _forgotPasswordService.ResetPassword(model);
-            }
-            catch (LcaException ex)
-            {
-                return BadRequest(ex.ToSerializableObject());
-            }
+
+            _forgotPasswordService.ResetPassword(model);
 
             return Ok(new
             {
                 Message = "Your password has been reset successfully."
             });
         }
-        
+
     }
 }

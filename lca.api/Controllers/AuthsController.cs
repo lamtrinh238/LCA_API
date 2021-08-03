@@ -19,10 +19,6 @@ namespace LCA.Api.Controllers
         public IActionResult Authenticate(AuthenticateRequestModel model)
         {
             var response = _authService.Authenticate(model);
-
-            if (response == null)
-                return BadRequest(new { message = "Username or password is incorrect" });
-
             return Ok(response);
         }
 
