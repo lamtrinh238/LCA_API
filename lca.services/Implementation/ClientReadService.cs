@@ -337,10 +337,12 @@ namespace LCA.Services.Implementation
         public IEnumerable<EPDDefaultA2Model> FilterEPDDefaultA2(int clientID)
         {
             var query = from a2 in _dbContext.EpddefaultA2s
+                        join material in _dbContext.EpdmaterialsSimas on a2.Epda2id equals material.Id
                         where a2.ComId == clientID
                         select new EPDDefaultA2Model()
                         {
                             Id = a2.Id,
+                            EpdmaterialName = material.EpdmaterialName,
                             ComId = a2.ComId,
                             Epda2id = a2.Epda2id,
                             Epda2km = a2.Epda2km,
@@ -358,10 +360,12 @@ namespace LCA.Services.Implementation
         public IEnumerable<EPDDefaultA3Model> FilterEPDDefaultA3(int clientID)
         {
             var query = from a3 in _dbContext.EpddefaultA3s
+                        join material in _dbContext.EpdmaterialsSimas on a3.Epda3id equals material.Id
                         where a3.ComId == clientID
                         select new EPDDefaultA3Model()
                         {
                             Id = a3.Id,
+                            EpdmaterialName = material.EpdmaterialName,
                             ComId = a3.ComId,
                             Epda3id = a3.Epda3id,
                             Epda3name = a3.Epda3name,
@@ -379,10 +383,12 @@ namespace LCA.Services.Implementation
         public IEnumerable<EPDDefaultA4Model> FilterEPDDefaultA4(int clientID)
         {
             var query = from a4 in _dbContext.EpddefaultA4s
+                        join material in _dbContext.EpdmaterialsSimas on a4.Epda4id equals material.Id
                         where a4.ComId == clientID
                         select new EPDDefaultA4Model()
                         {
                             Id = a4.Id,
+                            EpdmaterialName = material.EpdmaterialName,
                             ComId = a4.ComId,
                             Epda4id = a4.Epda4id,
                             Epda4km = a4.Epda4km,

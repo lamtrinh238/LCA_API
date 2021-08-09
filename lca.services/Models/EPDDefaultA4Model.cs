@@ -13,9 +13,10 @@ namespace LCA.Services.Models
         {
         }
 
-        public EPDDefaultA4Model(EpddefaultA4 epddefaultA4)
+        public EPDDefaultA4Model(EpddefaultA4 epddefaultA4, string epdmaterialName)
         {
             Id = epddefaultA4.Id;
+            EpdmaterialName = epdmaterialName;
             ComId = epddefaultA4.ComId;
             Epda4id = epddefaultA4.Epda4id;
             Epda4km = epddefaultA4.Epda4km;
@@ -28,6 +29,7 @@ namespace LCA.Services.Models
         }
 
         public int Id { get; set; }
+        public string EpdmaterialName { get; set; }
         public int ComId { get; set; }
         public int Epda4id { get; set; }
         public int? Epda4km { get; set; }

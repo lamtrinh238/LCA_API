@@ -13,9 +13,10 @@ namespace LCA.Services.Models
         {
         }
 
-        public EPDDefaultA2Model(EpddefaultA2 epddefaultA2)
+        public EPDDefaultA2Model(EpddefaultA2 epddefaultA2, string epdmaterialName)
         {
             Id = epddefaultA2.Id;
+            EpdmaterialName = epdmaterialName;
             ComId = epddefaultA2.ComId;
             Epda2id = epddefaultA2.Epda2id;
             Epda2km = epddefaultA2.Epda2km;
@@ -28,6 +29,7 @@ namespace LCA.Services.Models
         }
 
         public int Id { get; set; }
+        public string EpdmaterialName { get; set; }
         public int ComId { get; set; }
         public int Epda2id { get; set; }
         public int? Epda2km { get; set; }
