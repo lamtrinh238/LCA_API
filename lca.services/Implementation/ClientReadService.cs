@@ -333,5 +333,26 @@ namespace LCA.Services.Implementation
             List<ClientModel> clients = query.Select(com => com).ToList();
             return clients;
         }
+
+        public IEnumerable<EPDDefaultA2Model> FilterEPDDefaultA2(int clientID, BaseFilter filter)
+        {
+            var query = from a2 in _dbContext.EpddefaultA2s
+                        where a2.ComId == clientID
+                        select new EPDDefaultA2Model()
+                        {
+                            Id = a2.Id,
+                            ComId = a2.ComId,
+                            Epda2id = a2.Epda2id,
+                            Epda2km = a2.Epda2km,
+                            Epda2filling = a2.Epda2filling,
+                            Epda2return = a2.Epda2return,
+                            Epda2reuse = a2.Epda2reuse,
+                            Epda2name = a2.Epda2name,
+                            Comments = a2.Comments,
+                            GroupId = a2.GroupId,
+                        };
+            List<EPDDefaultA2Model> a2s = query.Select(a2 => a2).ToList();
+            return a2s;
+        }
     }
 }

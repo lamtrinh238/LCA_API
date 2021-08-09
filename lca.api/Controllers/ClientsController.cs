@@ -84,5 +84,12 @@ namespace LCA.API.Controllers
                 ID = compLink
             });
         }
+
+        // GET api/<ClientsController>/5
+        [HttpGet("{clientID:int}/epd_default_a2")]
+        public IEnumerable<EPDDefaultA2Model> GetEPDDefaultA2(int clientID, [FromQuery] BaseFilter filter)
+        {
+            return _clientReadService.FilterEPDDefaultA2(clientID, filter);
+        }
     }
 }
