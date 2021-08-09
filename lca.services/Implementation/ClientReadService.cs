@@ -334,7 +334,7 @@ namespace LCA.Services.Implementation
             return clients;
         }
 
-        public IEnumerable<EPDDefaultA2Model> FilterEPDDefaultA2(int clientID, BaseFilter filter)
+        public IEnumerable<EPDDefaultA2Model> FilterEPDDefaultA2(int clientID)
         {
             var query = from a2 in _dbContext.EpddefaultA2s
                         where a2.ComId == clientID
@@ -353,6 +353,27 @@ namespace LCA.Services.Implementation
                         };
             List<EPDDefaultA2Model> a2s = query.Select(a2 => a2).ToList();
             return a2s;
+        }
+
+        public IEnumerable<EPDDefaultA3Model> FilterEPDDefaultA3(int clientID)
+        {
+            var query = from a3 in _dbContext.EpddefaultA3s
+                        where a3.ComId == clientID
+                        select new EPDDefaultA3Model()
+                        {
+                            Id = a3.Id,
+                            ComId = a3.ComId,
+                            Epda3id = a3.Epda3id,
+                            Epda3name = a3.Epda3name,
+                            Epda3quantity = a3.Epda3quantity,
+                            Comments = a3.Comments,
+                            Epda3unit = a3.Epda3unit,
+                            GroupId = a3.GroupId,
+                            Type = a3.Type,
+                            UnitCalc = a3.UnitCalc,
+                        };
+            List<EPDDefaultA3Model> a3s = query.Select(a3 => a3).ToList();
+            return a3s;
         }
     }
 }

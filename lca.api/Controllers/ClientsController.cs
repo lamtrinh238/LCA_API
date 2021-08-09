@@ -87,9 +87,16 @@ namespace LCA.API.Controllers
 
         // GET api/<ClientsController>/5
         [HttpGet("{clientID:int}/epd_default_a2")]
-        public IEnumerable<EPDDefaultA2Model> GetEPDDefaultA2(int clientID, [FromQuery] BaseFilter filter)
+        public IEnumerable<EPDDefaultA2Model> GetEPDDefaultA2(int clientID)
         {
-            return _clientReadService.FilterEPDDefaultA2(clientID, filter);
+            return _clientReadService.FilterEPDDefaultA2(clientID);
+        }
+
+        // GET api/<ClientsController>/5
+        [HttpGet("{clientID:int}/epd_default_a3")]
+        public IEnumerable<EPDDefaultA3Model> GetEPDDefaultA3(int clientID)
+        {
+            return _clientReadService.FilterEPDDefaultA3(clientID);
         }
     }
 }
