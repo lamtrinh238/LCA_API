@@ -375,5 +375,26 @@ namespace LCA.Services.Implementation
             List<EPDDefaultA3Model> a3s = query.Select(a3 => a3).ToList();
             return a3s;
         }
+
+        public IEnumerable<EPDDefaultA4Model> FilterEPDDefaultA4(int clientID)
+        {
+            var query = from a4 in _dbContext.EpddefaultA4s
+                        where a4.ComId == clientID
+                        select new EPDDefaultA4Model()
+                        {
+                            Id = a4.Id,
+                            ComId = a4.ComId,
+                            Epda4id = a4.Epda4id,
+                            Epda4km = a4.Epda4km,
+                            Epda4filling = a4.Epda4filling,
+                            Epda4return = a4.Epda4return,
+                            Epda4reuse = a4.Epda4reuse,
+                            Epda4name = a4.Epda4name,
+                            Comments = a4.Comments,
+                            GroupId = a4.GroupId,
+                        };
+            List<EPDDefaultA4Model> a4s = query.Select(a4 => a4).ToList();
+            return a4s;
+        }
     }
 }

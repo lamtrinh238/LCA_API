@@ -98,5 +98,12 @@ namespace LCA.API.Controllers
         {
             return _clientReadService.FilterEPDDefaultA3(clientID);
         }
+
+        // GET api/<ClientsController>/5
+        [HttpGet("{clientID:int}/epd_default_a4")]
+        public IEnumerable<EPDDefaultA4Model> GetEPDDefaultA4(int clientID)
+        {
+            return _clientReadService.FilterEPDDefaultA4(clientID);
+        }
     }
 }

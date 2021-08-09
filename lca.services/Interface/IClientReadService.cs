@@ -12,5 +12,6 @@ namespace LCA.Service.Interface
         public IEnumerable<ClientModel> FilterCompany(int clientID, BaseFilter filter);
         public IEnumerable<EPDDefaultA2Model> FilterEPDDefaultA2(int clientID);
         public IEnumerable<EPDDefaultA3Model> FilterEPDDefaultA3(int clientID);
+        public IEnumerable<EPDDefaultA4Model> FilterEPDDefaultA4(int clientID);
     }
 }
