@@ -105,5 +105,41 @@ namespace LCA.API.Controllers
         {
             return _clientReadService.FilterEPDDefaultA4(clientID);
         }
+
+        // POST api/<ClientsController>/5/epd_default_a2
+        [HttpPost("{clientID:int}/epd_default_a2")]
+        public IActionResult CreateEPDDefaultA2(int clientID, [FromBody] EPDDefaultA2Model ePDDefaultA2)
+        {
+            ePDDefaultA2.ComId = clientID;
+            var res = _clientWriteService.CreateEPDDefaultA2(ePDDefaultA2);
+            return Ok(new
+            {
+                ID = res
+            });
+        }
+
+        // POST api/<ClientsController>/5/epd_default_a3
+        [HttpPost("{clientID:int}/epd_default_a3")]
+        public IActionResult CreateEPDDefaultA3(int clientID, [FromBody] EPDDefaultA3Model ePDDefaultA3)
+        {
+            ePDDefaultA3.ComId = clientID;
+            var res = _clientWriteService.CreateEPDDefaultA3(ePDDefaultA3);
+            return Ok(new
+            {
+                ID = res
+            });
+        }
+
+        // POST api/<ClientsController>/5/epd_default_a4
+        [HttpPost("{clientID:int}/epd_default_a4")]
+        public IActionResult CreateEPDDefaultA4(int clientID, [FromBody] EPDDefaultA4Model ePDDefaultA4)
+        {
+            ePDDefaultA4.ComId = clientID;
+            var res = _clientWriteService.CreateEPDDefaultA4(ePDDefaultA4);
+            return Ok(new
+            {
+                ID = res
+            });
+        }
     }
 }

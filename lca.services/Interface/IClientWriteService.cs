@@ -10,5 +10,8 @@ namespace LCA.Service.Interface
         long UpdateClient(int clientID, ClientUpdateModel client);
         long DeleteClient(int clientID);
         long CreateCompanyLink(CompanyLinkModel companyLink);
+        long CreateEPDDefaultA2(EPDDefaultA2Model ePDDefaultA2);
+        long CreateEPDDefaultA3(EPDDefaultA3Model ePDDefaultA3);
+        long CreateEPDDefaultA4(EPDDefaultA4Model ePDDefaultA4);
     }
 }

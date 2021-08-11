@@ -146,5 +146,53 @@ namespace LCA.Service.Implementation
             return newCompanyLink.Id;
 
         }
+
+        public long CreateEPDDefaultA2(EPDDefaultA2Model ePDDefaultA2)
+        {
+            var newEPDDefaultA2 = new EpddefaultA2
+            {
+                ComId = ePDDefaultA2.ComId,
+                Epda2id = ePDDefaultA2.Epda2id,
+                Epda2km = ePDDefaultA2.Epda2km,
+                GroupId = ePDDefaultA2.GroupId,
+                Comments = ePDDefaultA2.Comments,
+            };
+
+            this._dbContext.Entry(newEPDDefaultA2).State = EntityState.Added;
+            this._dbContext.SaveChanges();
+            return newEPDDefaultA2.Id;
+        }
+
+        public long CreateEPDDefaultA3(EPDDefaultA3Model ePDDefaultA3)
+        {
+            var newEPDDefaultA3 = new EpddefaultA3
+            {
+                ComId = ePDDefaultA3.ComId,
+                Epda3id = ePDDefaultA3.Epda3id,
+                Epda3quantity = ePDDefaultA3.Epda3quantity,
+                GroupId = ePDDefaultA3.GroupId,
+                UnitCalc = ePDDefaultA3.UnitCalc,
+                Comments = ePDDefaultA3.Comments,
+            };
+
+            this._dbContext.Entry(newEPDDefaultA3).State = EntityState.Added;
+            this._dbContext.SaveChanges();
+            return newEPDDefaultA3.Id;
+        }
+
+        public long CreateEPDDefaultA4(EPDDefaultA4Model ePDDefaultA4)
+        {
+            var newEPDDefaultA4 = new EpddefaultA4
+            {
+                ComId = ePDDefaultA4.ComId,
+                Epda4km = ePDDefaultA4.Epda4km,
+                GroupId = ePDDefaultA4.GroupId,
+                Comments = ePDDefaultA4.Comments,
+            };
+
+            this._dbContext.Entry(newEPDDefaultA4).State = EntityState.Added;
+            this._dbContext.SaveChanges();
+            return newEPDDefaultA4.Id;
+        }
     }
 }
