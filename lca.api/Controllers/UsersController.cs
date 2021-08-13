@@ -63,6 +63,17 @@ namespace LCA.API.Controllers
             });
         }
 
+        // DELETE api/<UsersController>/5
+        [HttpDelete("{userID:long}")]
+        public IActionResult Delete(long userID)
+        {
+            _userWriteService.DeleteUser(userID);
+            return Ok(new
+            {
+                ID = userID
+            });
+        }
+
         // PUT api/<UsersController>/5/change_password
         [HttpPut("{userID:long}/changePassword")]
         public IActionResult ChangePassword(long userID, [FromBody] PasswordChangeModel model)

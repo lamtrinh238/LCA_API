@@ -11,6 +11,8 @@ namespace LCA.Service.Interface
     {
         long CreateUser(UserModel userModel);
         long UpdateUser(long userID, UserModel user);
+        long DeleteUser(long userID);
+
 
         long ChangePassword(long userID, PasswordChangeModel model);
     }

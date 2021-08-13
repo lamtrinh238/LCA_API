@@ -100,5 +100,19 @@ namespace LCA.Service.Implementation
             this._dbContext.SaveChanges();
             return userInfo.UsrId;
         }
+
+        public long DeleteUser(long userID)
+        {
+            var existingUser = this._dbContext.Users.SingleOrDefault(user => user.UsrId == userID);
+            if (existingUser == null)
+            {
+                throw new UserNotFoundException();
+            }
+
+            this._dbContext.Entry<User>(existingUser).State = EntityState.Deleted;
+            this._dbContext.SaveChanges();
+
+            return userID;
+        }
     }
 }
