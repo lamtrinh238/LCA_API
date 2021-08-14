@@ -163,6 +163,26 @@ namespace LCA.Service.Implementation
             return newEPDDefaultA2.Id;
         }
 
+        public long UpdateEPDDefaultA2(int epdID, EPDDefaultA2Model ePDDefaultA2)
+        {
+            var existingEPD = this._dbContext.EpddefaultA2s.SingleOrDefault(epd => epd.Id == epdID);
+            existingEPD.Epda2id = ePDDefaultA2.Epda2id;
+            existingEPD.Epda2km = ePDDefaultA2.Epda2km;
+            existingEPD.GroupId = ePDDefaultA2.GroupId;
+            existingEPD.Comments = ePDDefaultA2.Comments;
+
+            this._dbContext.Entry<EpddefaultA2>(existingEPD).State = EntityState.Modified;
+            this._dbContext.SaveChanges();
+            return epdID;
+        }
+
+        public long DeleteEPDDefaultA2(int epdID)
+        {
+            this._dbContext.EpddefaultA2s.RemoveRange(this._dbContext.EpddefaultA2s.Where(epd => epd.Id == epdID));
+            this._dbContext.SaveChanges();
+            return epdID;
+        }
+
         public long CreateEPDDefaultA3(EPDDefaultA3Model ePDDefaultA3)
         {
             var newEPDDefaultA3 = new EpddefaultA3
@@ -180,11 +200,33 @@ namespace LCA.Service.Implementation
             return newEPDDefaultA3.Id;
         }
 
+        public long UpdateEPDDefaultA3(int epdID, EPDDefaultA3Model ePDDefaultA3)
+        {
+            var existingEPD = this._dbContext.EpddefaultA3s.SingleOrDefault(epd => epd.Id == epdID);
+            existingEPD.Epda3id = ePDDefaultA3.Epda3id;
+            existingEPD.Epda3quantity = ePDDefaultA3.Epda3quantity;
+            existingEPD.GroupId = ePDDefaultA3.GroupId;
+            existingEPD.UnitCalc = ePDDefaultA3.UnitCalc;
+            existingEPD.Comments = ePDDefaultA3.Comments;
+
+            this._dbContext.Entry<EpddefaultA3>(existingEPD).State = EntityState.Modified;
+            this._dbContext.SaveChanges();
+            return epdID;
+        }
+
+        public long DeleteEPDDefaultA3(int epdID)
+        {
+            this._dbContext.EpddefaultA3s.RemoveRange(this._dbContext.EpddefaultA3s.Where(epd => epd.Id == epdID));
+            this._dbContext.SaveChanges();
+            return epdID;
+        }
+
         public long CreateEPDDefaultA4(EPDDefaultA4Model ePDDefaultA4)
         {
             var newEPDDefaultA4 = new EpddefaultA4
             {
                 ComId = ePDDefaultA4.ComId,
+                Epda4id = ePDDefaultA4.Epda4id,
                 Epda4km = ePDDefaultA4.Epda4km,
                 GroupId = ePDDefaultA4.GroupId,
                 Comments = ePDDefaultA4.Comments,
@@ -193,6 +235,26 @@ namespace LCA.Service.Implementation
             this._dbContext.Entry(newEPDDefaultA4).State = EntityState.Added;
             this._dbContext.SaveChanges();
             return newEPDDefaultA4.Id;
+        }
+
+        public long UpdateEPDDefaultA4(int epdID, EPDDefaultA4Model ePDDefaultA4)
+        {
+            var existingEPD = this._dbContext.EpddefaultA4s.SingleOrDefault(epd => epd.Id == epdID);
+            existingEPD.Epda4id = ePDDefaultA4.Epda4id;
+            existingEPD.Epda4km = ePDDefaultA4.Epda4km;
+            existingEPD.GroupId = ePDDefaultA4.GroupId;
+            existingEPD.Comments = ePDDefaultA4.Comments;
+
+            this._dbContext.Entry<EpddefaultA4>(existingEPD).State = EntityState.Modified;
+            this._dbContext.SaveChanges();
+            return epdID;
+        }
+
+        public long DeleteEPDDefaultA4(int epdID)
+        {
+            this._dbContext.EpddefaultA4s.RemoveRange(this._dbContext.EpddefaultA4s.Where(epd => epd.Id == epdID));
+            this._dbContext.SaveChanges();
+            return epdID;
         }
     }
 }

@@ -86,28 +86,28 @@ namespace LCA.API.Controllers
         }
 
         // GET api/<ClientsController>/5
-        [HttpGet("{clientID:int}/epd_default_a2")]
+        [HttpGet("{clientID:int}/EPDDefaultA2")]
         public IEnumerable<EPDDefaultA2Model> GetEPDDefaultA2(int clientID)
         {
             return _clientReadService.FilterEPDDefaultA2(clientID);
         }
 
         // GET api/<ClientsController>/5
-        [HttpGet("{clientID:int}/epd_default_a3")]
+        [HttpGet("{clientID:int}/EPDDefaultA3")]
         public IEnumerable<EPDDefaultA3Model> GetEPDDefaultA3(int clientID)
         {
             return _clientReadService.FilterEPDDefaultA3(clientID);
         }
 
         // GET api/<ClientsController>/5
-        [HttpGet("{clientID:int}/epd_default_a4")]
+        [HttpGet("{clientID:int}/EPDDefaultA4")]
         public IEnumerable<EPDDefaultA4Model> GetEPDDefaultA4(int clientID)
         {
             return _clientReadService.FilterEPDDefaultA4(clientID);
         }
 
         // POST api/<ClientsController>/5/epd_default_a2
-        [HttpPost("{clientID:int}/epd_default_a2")]
+        [HttpPost("{clientID:int}/EPDDefaultA2")]
         public IActionResult CreateEPDDefaultA2(int clientID, [FromBody] EPDDefaultA2Model ePDDefaultA2)
         {
             ePDDefaultA2.ComId = clientID;
@@ -118,8 +118,30 @@ namespace LCA.API.Controllers
             });
         }
 
+        // PUT api/<ClientsController>/5
+        [HttpPut("EPDDefaultA2/{epdID:int}")]
+        public IActionResult UpdateEPDDefaultA2(int epdID, [FromBody] EPDDefaultA2Model ePDDefaultA2)
+        {
+            _clientWriteService.UpdateEPDDefaultA2(epdID, ePDDefaultA2);
+            return Ok(new
+            {
+                ID = epdID
+            });
+        }
+
+        // DELETE api/<ClientsController>/5
+        [HttpDelete("EPDDefaultA2/{epdID:int}")]
+        public IActionResult DeleteEPDDefaultA2(int epdID)
+        {
+            _clientWriteService.DeleteEPDDefaultA2(epdID);
+            return Ok(new
+            {
+                ID = epdID
+            });
+        }
+
         // POST api/<ClientsController>/5/epd_default_a3
-        [HttpPost("{clientID:int}/epd_default_a3")]
+        [HttpPost("{clientID:int}/EPDDefaultA3")]
         public IActionResult CreateEPDDefaultA3(int clientID, [FromBody] EPDDefaultA3Model ePDDefaultA3)
         {
             ePDDefaultA3.ComId = clientID;
@@ -130,8 +152,30 @@ namespace LCA.API.Controllers
             });
         }
 
+        // PUT api/<ClientsController>/5
+        [HttpPut("EPDDefaultA3/{epdID:int}")]
+        public IActionResult UpdateEPDDefaultA3(int epdID, [FromBody] EPDDefaultA3Model ePDDefaultA3)
+        {
+            _clientWriteService.UpdateEPDDefaultA3(epdID, ePDDefaultA3);
+            return Ok(new
+            {
+                ID = epdID
+            });
+        }
+
+        // DELETE api/<ClientsController>/5
+        [HttpDelete("EPDDefaultA3/{epdID:int}")]
+        public IActionResult DeleteEPDDefaultA3(int epdID)
+        {
+            _clientWriteService.DeleteEPDDefaultA3(epdID);
+            return Ok(new
+            {
+                ID = epdID
+            });
+        }
+
         // POST api/<ClientsController>/5/epd_default_a4
-        [HttpPost("{clientID:int}/epd_default_a4")]
+        [HttpPost("{clientID:int}/EPDDefaultA4")]
         public IActionResult CreateEPDDefaultA4(int clientID, [FromBody] EPDDefaultA4Model ePDDefaultA4)
         {
             ePDDefaultA4.ComId = clientID;
@@ -139,6 +183,28 @@ namespace LCA.API.Controllers
             return Ok(new
             {
                 ID = res
+            });
+        }
+
+        // PUT api/<ClientsController>/5
+        [HttpPut("EPDDefaultA4/{epdID:int}")]
+        public IActionResult UpdateEPDDefaultA4(int epdID, [FromBody] EPDDefaultA4Model ePDDefaultA4)
+        {
+            _clientWriteService.UpdateEPDDefaultA4(epdID, ePDDefaultA4);
+            return Ok(new
+            {
+                ID = epdID
+            });
+        }
+
+        // DELETE api/<ClientsController>/5
+        [HttpDelete("EPDDefaultA4/{epdID:int}")]
+        public IActionResult DeleteEPDDefaultA4(int epdID)
+        {
+            _clientWriteService.DeleteEPDDefaultA4(epdID);
+            return Ok(new
+            {
+                ID = epdID
             });
         }
     }
